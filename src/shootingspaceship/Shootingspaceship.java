@@ -7,29 +7,29 @@ import java.util.*;
 
 public class Shootingspaceship extends JPanel implements Runnable {
 
-    private Thread th;
-    private Player player;
-    private Shot[] shots;
-    private ArrayList enemies;
-    private final int shotSpeed = -2;
-    private final int playerLeftSpeed = -2;
-    private final int playerRightSpeed = 2;
-    private final int width = 500;
-    private final int height = 500;
-    private final int playerMargin = 10;
-    private final int enemyMaxDownSpeed = 1;
-    private final int enemyMaxHorizonSpeed = 1;
-    private final int enemyTimeGap = 2000; //unit: msec
-    private final float enemyDownSpeedInc = 0.3f;
-    private final int maxEnemySize = 10;
-    private int enemySize;
-    private javax.swing.Timer timer;
-    private boolean playerMoveLeft;
-    private boolean playerMoveRight;
-    private Image dbImage;
-    private Graphics dbg;
-    private Random rand;
-    private int maxShotNum = 20;
+    protected Thread th;
+    protected Player player;
+    protected Shot[] shots;
+    protected ArrayList enemies;
+    protected final int shotSpeed = -2;
+    protected final int playerLeftSpeed = -2;
+    protected final int playerRightSpeed = 2;
+    protected final int width = 500;
+    protected final int height = 500;
+    protected final int playerMargin = 10;
+    protected final int enemyMaxDownSpeed = 1;
+    protected final int enemyMaxHorizonSpeed = 1;
+    protected final int enemyTimeGap = 2000; //unit: msec
+    protected final float enemyDownSpeedInc = 0.3f;
+    protected final int maxEnemySize = 10;
+    protected int enemySize;
+    protected javax.swing.Timer timer;
+    protected boolean playerMoveLeft;
+    protected boolean playerMoveRight;
+    protected Image dbImage;
+    protected Graphics dbg;
+    protected Random rand;
+    protected int maxShotNum = 20;
 
     public Shootingspaceship() {
         setBackground(Color.black);
