@@ -13,10 +13,10 @@ import java.awt.Color;
  */
 public class Shot {
 
-    private int x_pos;
-    private int y_pos;
-    private boolean alive;
-    private final int radius = 3;
+	protected int x_pos;
+	protected int y_pos;
+	protected boolean alive;
+	protected final int radius = 3;
 
     public Shot(int x, int y) {
         x_pos = x;
