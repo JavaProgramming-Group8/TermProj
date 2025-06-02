@@ -15,7 +15,7 @@ public class HPEnemy extends Enemy {
 	@Override
 	public boolean isCollidedWithShot(Shot[] shots) {
         for (Shot shot : shots) {
-            if (shot == null) {
+            if (shot == null || !shot.alive) {
                 continue;
             }
             if (-collision_distance <= (y_pos - shot.getY()) && (y_pos - shot.getY() <= collision_distance)) {

@@ -8,12 +8,12 @@ public class Boss extends HPEnemy{
 	protected int shot_y;
 	protected int bossShotCoolTime;
 	
-	public Boss(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc,Player player) {
+	public Boss(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
 		super(x, y, delta_x, delta_y, max_x, max_y, delta_y_inc);
 		this.shot_x = x;
 		this.shot_y = y;
 		this.hp = 50;
-		this.bossShotCoolTime = 50;
+		this.bossShotCoolTime = 30;
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class Boss extends HPEnemy{
 	
 	public EnemyShot bossShot() {
 		if(hp > 0 && bossShotCoolTime <= 0) {
-			bossShotCoolTime = 50;
+			bossShotCoolTime = 30;
 			EnemyShot enemyShot = new EnemyShot(shot_x, shot_y);
 			return enemyShot;
 		}
