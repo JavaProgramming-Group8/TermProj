@@ -8,13 +8,13 @@ public class ItemEnemy extends Enemy{
 	protected Item deadItem;
 	private Random random = new Random();
 	
-	public ItemEnemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
+	public ItemEnemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc, ScoreSystem scoreSystem) {
 		super(x, y, delta_x, delta_y, max_x, max_y, delta_y_inc);
 		
 		 int nerfOrBuff = random.nextInt(2); // 0 또는 1을 무작위로 생성
 
 	        if (nerfOrBuff == 1) {
-	            this.deadItem = new BuffItem(x, y); 
+	            this.deadItem = new BuffItem(x, y, scoreSystem); 
 	        } else { 
 	            this.deadItem = new NerfItem(x, y);
 	        }

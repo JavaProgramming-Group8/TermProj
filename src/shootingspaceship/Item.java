@@ -15,6 +15,9 @@ public class Item {
 		y += speed;
 	}
 	
+	public void applyTo(Object obj) {
+	}
+	
 	public void applyTo(Shootingspaceship ship) {
 	}
 	
@@ -24,39 +27,10 @@ public class Item {
     public boolean isCollideWith(Player player) {
     	int dx = Math.abs(x - player.getX());
     	int dy = Math.abs(y - player.getY());
-    	return dx <= 10 && dy <= 10;
+    	return dx <= 30 && dy <= 30;
     }
+
 }
 
-class BuffItem extends Item{
 
-	public BuffItem(int x, int y) {
-		super(x, y);
-	}
-	
-	
-	//한 번에 두 발 쏘는 구조로 변경??
-	@Override
-	public void applyTo(Shootingspaceship ship) {
-	}
-	
-}
-
-class NerfItem extends Item {
-	public NerfItem(int x, int y) {
-		super(x, y);
-	}
-	
-	@Override
-	public void applyTo(Shootingspaceship ship) {
-		boolean temp = ship.playerMoveLeft; 
-		ship.playerMoveLeft = ship.playerMoveRight;
-		ship.playerMoveRight = temp; 	
-	}
-	
-	@Override
-	public void draw(Graphics g) {
-		g.setColor(Color.GREEN);
-	}
-}
 

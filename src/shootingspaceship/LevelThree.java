@@ -5,18 +5,22 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
-
-public class LevelThree extends Shootingspaceship {
+public class LevelThree extends Shootingspaceship implements NerfEffect{
 	private JFrame frame;
 	private ArrayList<Enemy> splitedBaby;
+	private ArrayList<Item> items;
 	protected ScoreSystem scoreLevelThree;
 	private Random random;
 	private boolean isGameOver = false;
+	private boolean nerfed = false;
+	private long nerfTime = 0; 
+
 	
 	public LevelThree(JFrame frame) {
 		super();
 		this.frame = frame;
 		this.splitedBaby = new ArrayList<>();
+		this.items = new ArrayList<>();
 		this.scoreLevelThree = new ScoreSystem();
 		this.random = new Random();
 		
@@ -47,7 +51,7 @@ public class LevelThree extends Shootingspaceship {
 	                newEnemy = new HPEnemy(randomPosX, 0, horSpeed, downSpeed, width, height, enemyDownSpeedInc);
 	                break;
 	            case 2:
-	                newEnemy = new ItemEnemy(randomPosX, 0, horSpeed, downSpeed, width, height, enemyDownSpeedInc);
+	                newEnemy = new ItemEnemy(randomPosX, 0, horSpeed, downSpeed, width, height, enemyDownSpeedInc, scoreLevelThree);
 	                break;
 	            case 3:
 	                newEnemy = new SplitEnemy(randomPosX, 0, horSpeed, downSpeed, width, height, enemyDownSpeedInc);
@@ -90,6 +94,18 @@ public class LevelThree extends Shootingspaceship {
 	                enemies.addAll(splitedBaby);
 	                splitedBaby.clear();
 	            }
+	            
+	            //아이템 아래로 이동 및 효과적용 
+	            Iterator<Item> it = items.iterator();
+	            while (it.hasNext()) {
+	            	Item item = it.next();
+	            	item.move();
+	            	
+	            	if(item.isCollideWith(player)) {
+	            		item.applyTo(player);
+	            		it.remove();
+	            	}
+	            }
 
 	            repaint();
 
@@ -116,7 +132,35 @@ public class LevelThree extends Shootingspaceship {
 	    return 0; 
 	}
 	
-    
+	//nerf item 동작
+	public void activateNerfEffect() {
+		System.out.println("효과제발");
+		nerfed = true;
+		nerfTime = System. currentTimeMillis() + 15000;
+	}
+	
+	private boolean isNerfActive() {
+		return nerfed && System.currentTimeMillis() < nerfTime;
+	}
+	
+	public void NerfKey(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		if(key == KeyEvent.VK_LEFT) {
+			playerMoveRight = true;
+		} else if (key == KeyEvent.VK_RIGHT) {
+			playerMoveLeft = true;
+		} else if (key == KeyEvent.VK_DOWN) {
+			for (int i = 0; i < shots.length; ++i) {
+				if (shots[i] == null) {
+					shots[i] = player.generateShot();
+					break;
+				}
+			}
+		}
+		
+	}
+	
     //void 클리어시 다음단계(boss)스크린
 	
 	private void triggerGameOver() {
@@ -156,6 +200,7 @@ public class LevelThree extends Shootingspaceship {
                 	Item item = itemEnemy.generateItem();
                 	if(item != null) {
                 		//아이템 능력 적용(applyTo)
+                		items.add(item);//아이템을 리스트에 추가
                 	}
                 }
                 enemyList.remove();
@@ -163,6 +208,12 @@ public class LevelThree extends Shootingspaceship {
             if (enemy.isCollidedWithPlayer(player)) {
                 triggerGameOver();
             }
+        }
+        
+        Iterator itemList = items.iterator();
+        while (itemList.hasNext()) {
+        	Item item = (Item) itemList.next();
+        	item.draw(g);
         }
         
         g.setColor(Color.WHITE); // 점수 글자색
