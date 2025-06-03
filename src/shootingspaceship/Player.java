@@ -14,10 +14,10 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public class Player {
-    private int x_pos;
-    private int y_pos;
-    private int min_x;
-    private int max_x;
+	protected int x_pos;
+	protected int y_pos;
+	protected int min_x;
+	protected int max_x;
 
     public Player(int x, int y, int min_x, int max_x) {
         x_pos = x;
