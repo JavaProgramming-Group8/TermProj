@@ -7,33 +7,43 @@ import java.util.List;
 import javax.swing.*;
 
 public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiver{
-	private JFrame frame;
-	private ArrayList<BasicEnemy> splitedBaby;
-	private ArrayList<Item> items;
-	protected ScoreSystem scoreLevelThree;
-	private Random random;
+    private JFrame frame;
+    private ArrayList<BasicEnemy> splitedBaby;
+    private ArrayList<Item> items;
+    protected ScoreSystem scoreLevelThree;
+    private Random random;
 
-	private boolean isNerfMode = false;
-	private long nerfEndTime = 0;
-	
-	private long lastFireTime = 0;
-	private final long FIRE_INTERVAL = 200;
-	
-	public LevelThree(JFrame frame) {
-		super(frame);
-		this.frame = frame;
-		this.splitedBaby = new ArrayList<>();
-		this.items = new ArrayList<>();
-		this.scoreLevelThree = new ScoreSystem();
-		this.random = new Random();
+    private Image backgroundImage; // 배경 이미지 필드 추가
 
-		this.player = new Dragon(250, 400, 0, 500);
-		Dragon dragon = (Dragon) this.player;
-		dragon.setScoreSystem(scoreLevelThree);
+    private boolean isNerfMode = false;
+    private long nerfEndTime = 0;
+    
+    private long lastFireTime = 0;
+    private final long FIRE_INTERVAL = 200;
+    
+    public LevelThree(JFrame frame) {
+        super(frame);
+        this.frame = frame;
+        this.splitedBaby = new ArrayList<>();
+        this.items = new ArrayList<>();
+        this.scoreLevelThree = new ScoreSystem();
+        this.random = new Random();
 
-		addKeyListener(new NerfKeyListener());
+        // 배경 이미지 로드 (이미지는 src/shootingspaceship/background.jpg에 위치)
+        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/background2.jpg");
+        if (imgUrl != null) {
+            backgroundImage = new ImageIcon(imgUrl).getImage();
+        } else {
+            System.out.println("배경 이미지가 없습니다: /shootingspaceship/background.jpg");
+        }
 
-		if (timer != null) {
+        this.player = new Dragon(250, 400, 0, 500);
+        Dragon dragon = (Dragon) this.player;
+        dragon.setScoreSystem(scoreLevelThree);
+
+        addKeyListener(new NerfKeyListener());
+
+        if (timer != null) {
             timer.stop();
             for (ActionListener pastAL : timer.getActionListeners()) {
                 timer.removeActionListener(pastAL);
@@ -41,11 +51,11 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
             timer.addActionListener(new addANewEnemyLevelThree());
             timer.start();
         }
-	}
-	
-	private class addANewEnemyLevelThree implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e) {
+    }
+    
+    private class addANewEnemyLevelThree implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
  	        int randomPosX = (int) (random.nextFloat() * width);
 	        float downSpeed = random.nextFloat() * enemyMaxDownSpeed * 2;
 	        float horSpeed = random.nextFloat() * 2 * enemyMaxHorizonSpeed - enemyMaxHorizonSpeed;
@@ -335,11 +345,17 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		initImage(g);
-		
-		player.drawPlayer(g);
-		
-		Iterator<Enemy> enemyList = enemies.iterator();
+        // 배경 그리기
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        } else {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
+
+        player.drawPlayer(g);
+
+        Iterator<Enemy> enemyList = enemies.iterator();
         while (enemyList.hasNext()) {
             Enemy enemy = (Enemy) enemyList.next();
             enemy.draw(g);
