@@ -62,7 +62,7 @@ public class BossLevel extends GameWithPause{
             	shot.collided();
             	enemyShotList.remove();
         
-            	triggerGameOver();
+            	triggerGameClear();
             	return;
             }
         }
@@ -260,7 +260,7 @@ public class BossLevel extends GameWithPause{
 	
 	public void triggerGameClear() {
 	    frame.getContentPane().removeAll();
-	    GameOverScreen clearScreen = new GameOverScreen(frame);
+	    GameClear clearScreen = new GameClear(frame);
 	    clearScreen.setBounds(0, 0, 500, 500);
 	    frame.add(clearScreen);
 	    frame.revalidate();
