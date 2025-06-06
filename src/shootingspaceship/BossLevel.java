@@ -1,8 +1,8 @@
 package shootingspaceship;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import javax.swing.*;
 
 public class BossLevel extends GameWithPause{
 	protected Boss boss;
@@ -11,17 +11,24 @@ public class BossLevel extends GameWithPause{
 
 	public BossLevel(JFrame frame) {
 		super(frame);
-		
+
 		if(timer != null) {
 			timer.stop();
 		}
 		enemies.clear();
-		
+
 		boss = new Boss(width / 2, height / 5, 1, 0, width, height, 0);
 		enemies.add(boss);
-		
+
 		bossShots = new ArrayList<>();
-		
+
+		this.player = new Dragon(
+			250,
+			400,
+			0,
+			500,
+			new Attack("NORMAL")
+		);
 	}
 	
 	private void bossColliededWithShot() {
@@ -137,5 +144,14 @@ public class BossLevel extends GameWithPause{
         }
         
         
+	}
+	
+	public void triggerGameClear() {
+	    frame.getContentPane().removeAll();
+	    GameOverScreen clearScreen = new GameOverScreen(frame);
+	    clearScreen.setBounds(0, 0, 500, 500);
+	    frame.add(clearScreen);
+	    frame.revalidate();
+	    frame.repaint();
 	}
 }

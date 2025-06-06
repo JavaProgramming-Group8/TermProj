@@ -23,7 +23,15 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 		this.items = new ArrayList<>();
 		this.scoreLevelThree = new ScoreSystem();
 		this.random = new Random();
-		
+
+		this.player = new Dragon(
+			250,
+			400,
+			0,
+			500,
+			new Attack("NORMAL")
+		);
+
 		addKeyListener(new NerfKeyListener());
 
 		
@@ -126,16 +134,23 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
 	    while (true) {
-	        // ★ 일시정지 체크 추가
-	        if (!isPaused) {
-	            for (int i = 0; i < shots.length; i++) {
-	                if (shots[i] != null) {
-	                    shots[i].moveShot(shotSpeed);
-	                    if (shots[i].getY() < 0) {
-	                        shots[i] = null;
-	                    }
+	        if (isPaused) {
+	            try {
+	                Thread.sleep(10);
+	            } catch (InterruptedException ex) {}
+	            continue; // 일시정지 상태면 아래 로직을 건너뜀
+	        }
+
+	        // ↓↓↓ 기존 게임 로직 ↓↓↓
+
+	        for (int i = 0; i < shots.length; i++) {
+	            if (shots[i] != null) {
+	                shots[i].moveShot(shotSpeed);
+	                if (shots[i].getY() < 0) {
+	                    shots[i] = null;
 	                }
 	            }
+	        }
 
 	            if (playerMoveLeft) {
 	                player.moveX(playerLeftSpeed);
@@ -145,43 +160,44 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 
 	            Iterator<Enemy> enemyList = enemies.iterator();
 	            while (enemyList.hasNext()) {
-	                Enemy enemy = enemyList.next();
+	                Enemy enemy = (Enemy) enemyList.next();
 	                enemy.move();
 	            }
-
+	            
 	            if (!splitedBaby.isEmpty()) {
 	                enemies.addAll(splitedBaby);
 	                splitedBaby.clear();
 	            }
-
-	            // 아이템 이동 및 효과 적용
+	            
+	            //아이템 아래로 이동 및 효과적용 
 	            Iterator<Item> it = items.iterator();
 	            while (it.hasNext()) {
-	                Item item = it.next();
-	                item.move();
-
-	                if (item.isCollideWithPlayer(player)) {
-	                    item.applyTo(this);
-	                    it.remove();
-	                    repaint();
-	                }
+	            	Item item = it.next();
+	            	item.move();
+	            	
+	            	if(item.isCollideWithPlayer(player)) {
+	            		item.applyTo(this);
+	            		it.remove();
+	            		repaint();
+	            	}
 	            }
 
-	            if (scoreLevelThree.getScore() > 300) {
-	                scoreLevelThree.scoreReset();
-	                bossLevelTrigger();
+	            
+	            if(scoreLevelThree.getScore() > 300) {
+	            	scoreLevelThree.scoreReset();
+	            	bossLevelTrigger();
 	            }
 
 	            repaint();
-	        }
 
-	        try {
-	            Thread.sleep(10);
-	        } catch (InterruptedException ex) {
-	        }
+	            try {
+	                Thread.sleep(10);
+	            } catch (InterruptedException ex) {
+	            	
+	            }
 
-	        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-	    }
+	            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+	        }
 	}
 	
 	private int getPointsForEnemy(Enemy enemy) {

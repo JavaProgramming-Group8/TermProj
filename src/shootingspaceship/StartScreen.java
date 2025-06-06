@@ -50,7 +50,17 @@ public class StartScreen extends JPanel {
 
     private void showInstructions() {
         JOptionPane.showMessageDialog(this,
-                "← / → : 이동\n↑ : 공격\nP : 일시정지",
+                "■ 조작법\n" +
+                "← / → : 플레이어 이동\n" +
+                "↓ : 총알 발사\n" +
+                "P : 일시정지/재개\n\n" +
+                "■ 게임 목표\n" +
+                "- 적을 처치하고 점수를 획득하세요.\n" +
+                "- 점수가 300점이 넘으면 보스 스테이지로 진입합니다.\n" +
+                "- 아이템을 먹으면 다양한 효과가 적용됩니다.\n\n" +
+                "■ 팁\n" +
+                "- 적의 공격과 아이템을 잘 피하세요!\n" +
+                "- 보스를 처치하면 게임이 클리어됩니다.",
                 "게임 방법",
                 JOptionPane.INFORMATION_MESSAGE);
     }
