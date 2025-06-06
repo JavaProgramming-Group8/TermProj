@@ -9,14 +9,24 @@ public class StartScreen extends JPanel {
 
     public StartScreen(JFrame frame) {
         this.frame = frame;
-        setLayout(new GridLayout(3, 1));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(Color.BLACK);
 
         JLabel title = new JLabel("슈팅 게임", SwingConstants.CENTER);
         title.setFont(new Font("맑은 고딕", Font.BOLD, 36));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setForeground(Color.WHITE);
+        add(Box.createVerticalStrut(60));
         add(title);
+        add(Box.createVerticalStrut(40));
+
+        Dimension btnSize = new Dimension(200, 45);
 
         JButton startButton = new JButton("게임 시작");
         startButton.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+        startButton.setMaximumSize(btnSize);
+        startButton.setPreferredSize(btnSize);
+        startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 startGame();
@@ -25,6 +35,9 @@ public class StartScreen extends JPanel {
 
         JButton howToButton = new JButton("게임 방법");
         howToButton.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+        howToButton.setMaximumSize(btnSize);
+        howToButton.setPreferredSize(btnSize);
+        howToButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         howToButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showInstructions();
@@ -32,6 +45,7 @@ public class StartScreen extends JPanel {
         });
 
         add(startButton);
+        add(Box.createVerticalStrut(20));
         add(howToButton);
     }
 
