@@ -38,7 +38,7 @@ public class StartScreen extends JPanel {
     private void startGame() {
         frame.getContentPane().removeAll();
 
-        GameWithPause game = new GameWithPause(frame);
+        LevelThree game = new LevelThree(frame);
         game.setBounds(0, 0, 500, 500);
         frame.add(game);
         frame.revalidate();

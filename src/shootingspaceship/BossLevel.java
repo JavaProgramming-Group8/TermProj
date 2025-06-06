@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
-public class BossLevel extends Shootingspaceship{
+public class BossLevel extends GameWithPause{
 	protected Boss boss;
 	protected ArrayList<EnemyShot> bossShots;
 	protected int bossShotSpeed = 3;
@@ -14,8 +14,7 @@ public class BossLevel extends Shootingspaceship{
     private boolean isGameOver = false;
 	
 	public BossLevel(JFrame frame) {
-		super();
-		this.frame = frame;
+		super(frame);
 		
 		if(timer != null) {
 			timer.stop();
@@ -35,7 +34,7 @@ public class BossLevel extends Shootingspaceship{
 	                if (boss.hp <= 0) {
 	                    enemies.remove(boss);
 	                    boss = null;
-	                    //게임 클리어 화면
+	                    triggerGameClear();
 	                }
 	            }
 	        }
@@ -105,6 +104,7 @@ public class BossLevel extends Shootingspaceship{
             	 }
              }
              
+             
              bossColliededWithShot();
              playerColliededWithShot();
              
@@ -143,29 +143,4 @@ public class BossLevel extends Shootingspaceship{
         
         
 	}
-	
-	private void triggerGameOver() {
-        isGameOver = true;
-
-        frame.getContentPane().removeAll();
-        GameOverScreen over = new GameOverScreen(frame);
-        over.setBounds(0, 0, 500, 500);
-        frame.add(over);
-        frame.revalidate();
-        frame.repaint();
-    }
-	
-	
-	public static void main(String[] args) {
-        JFrame frame = new JFrame("Boss Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        BossLevel gamePanel = new BossLevel(frame);
-        frame.getContentPane().add(gamePanel, null); 
-        frame.pack(); 
-        frame.setResizable(false);
-        frame.setVisible(true); 
-
-        gamePanel.start(); 
-    }
-
 }

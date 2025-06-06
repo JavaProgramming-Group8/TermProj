@@ -16,8 +16,8 @@ public class SplitEnemy extends Enemy{
 		this.random = new Random();
 	}
 	
-	public ArrayList<Enemy> generateEnemy(float babyMaxDownSpeed, float babyMaxHorizonSpeed){
-		ArrayList<Enemy> babyEnemies = new ArrayList<>();
+	public ArrayList<BasicEnemy> generateEnemy(float babyMaxDownSpeed, float babyMaxHorizonSpeed){
+		ArrayList<BasicEnemy> babyEnemies = new ArrayList<>();
 		
 		for(int i = 0; i<4; ++i) {
 			int babyX = (int) (x_pos + (random.nextInt(40)-20));
@@ -30,7 +30,7 @@ public class SplitEnemy extends Enemy{
 
             float horspeed = random.nextFloat() * 2 * babyMaxHorizonSpeed - babyMaxHorizonSpeed;
 
-            Enemy babyEnemy = new Enemy(babyX, babyY, horspeed, downspeed, max_x, max_y, delta_y_inc);
+            BasicEnemy babyEnemy = new BasicEnemy(babyX, babyY, horspeed, downspeed, max_x, max_y, delta_y_inc);
             babyEnemies.add(babyEnemy);
 		}
 		return babyEnemies;

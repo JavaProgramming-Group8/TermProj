@@ -5,19 +5,19 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class LevelThree extends Shootingspaceship implements NerfEffect{
+public class LevelThree extends GameWithPause implements NerfEffect{
 	private JFrame frame;
-	private ArrayList<Enemy> splitedBaby;
+	private ArrayList<BasicEnemy> splitedBaby;
 	private ArrayList<Item> items;
 	protected ScoreSystem scoreLevelThree;
 	private Random random;
-	private boolean isGameOver = false;
+
 	private boolean nerfed = false;
 	private long nerfTime = 0; 
 
 	
 	public LevelThree(JFrame frame) {
-		super();
+		super(frame);
 		this.frame = frame;
 		this.splitedBaby = new ArrayList<>();
 		this.items = new ArrayList<>();
@@ -45,7 +45,7 @@ public class LevelThree extends Shootingspaceship implements NerfEffect{
 
 	        switch (enemyType) {
 	            case 0:
-	                newEnemy = new Enemy(randomPosX, 0, horSpeed, downSpeed, width, height, enemyDownSpeedInc);
+	                newEnemy = new BasicEnemy(randomPosX, 0, horSpeed, downSpeed, width, height, enemyDownSpeedInc);
 	                break;
 	            case 1:
 	                newEnemy = new HPEnemy(randomPosX, 0, horSpeed, downSpeed, width, height, enemyDownSpeedInc);
@@ -106,6 +106,11 @@ public class LevelThree extends Shootingspaceship implements NerfEffect{
 	            		it.remove();
 	            	}
 	            }
+	            
+	            if(scoreLevelThree.getScore() > 300) {
+	            	scoreLevelThree.scoreReset();
+	            	bossLevelTrigger();
+	            }
 
 	            repaint();
 
@@ -161,18 +166,19 @@ public class LevelThree extends Shootingspaceship implements NerfEffect{
 		
 	}
 	
-    //void 클리어시 다음단계(boss)스크린
-	
-	private void triggerGameOver() {
-        isGameOver = true;
+	public void bossLevelTrigger() {
+		frame.getContentPane().removeAll();
+		JFrame frame = new JFrame("Boss Game");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        BossLevel gamePanel = new BossLevel(frame);
+        frame.getContentPane().add(gamePanel, null); 
+        frame.pack(); 
+        frame.setResizable(false);
+        frame.setVisible(true); 
 
-        frame.getContentPane().removeAll();
-        GameOverScreen over = new GameOverScreen(frame);
-        over.setBounds(0, 0, 500, 500);
-        frame.add(over);
-        frame.revalidate();
-        frame.repaint();
-    }
+        gamePanel.start(); 
+	}
+	
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -190,7 +196,7 @@ public class LevelThree extends Shootingspaceship implements NerfEffect{
             	
                 if(enemy instanceof SplitEnemy) {
                 	SplitEnemy splitEnemy = (SplitEnemy) enemy;
-                    ArrayList<Enemy> babyEnemies = splitEnemy.generateEnemy(splitEnemy.babyMaxDownSpeed, splitEnemy.babyMaxHorizonSpeed);
+                    ArrayList<BasicEnemy> babyEnemies = splitEnemy.generateEnemy(splitEnemy.babyMaxDownSpeed, splitEnemy.babyMaxHorizonSpeed);
                     if (babyEnemies != null) {
                         splitedBaby.addAll(babyEnemies);
                     }
@@ -199,7 +205,6 @@ public class LevelThree extends Shootingspaceship implements NerfEffect{
                 	ItemEnemy itemEnemy = (ItemEnemy) enemy;
                 	Item item = itemEnemy.generateItem();
                 	if(item != null) {
-                		//아이템 능력 적용(applyTo)
                 		items.add(item);//아이템을 리스트에 추가
                 	}
                 }
@@ -220,8 +225,7 @@ public class LevelThree extends Shootingspaceship implements NerfEffect{
         g.setFont(new Font("맑은 고딕", Font.BOLD, 16)); // 점수 폰트
         g.drawString("Score: " + scoreLevelThree.getScore(), 10, 40);
         
-        //일정 score 달성시 게임 클리어(다음단계이동) 스크린 호출
-
+        
         for (int i = 0; i < shots.length; i++) {
             if (shots[i] != null) {
                 shots[i].drawShot(g);

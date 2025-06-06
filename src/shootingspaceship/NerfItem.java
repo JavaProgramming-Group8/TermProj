@@ -8,16 +8,25 @@ public class NerfItem extends Item {
 	}
 	
 	@Override
-	public void applyTo(Shootingspaceship ship) {
-		if(ship instanceof NerfEffect) {
-			((NerfEffect)ship).activateNerfEffect(); 
-		}
+	public void applyTo(Object obj) {
+		System.out.println("[NerfItem] applyTo called. Object type: " + obj.getClass().getSimpleName());
+
+        if (obj instanceof NerfEffect) {
+            System.out.println("[NerfItem] Object is NerfEffect. Activating effect...");
+            ((NerfEffect)obj).activateNerfEffect();
+        } else {
+            System.out.println("[NerfItem] Object is NOT NerfEffect.");
+        }
+		/*
+		if(obj instanceof NerfEffect) {
+			((NerfEffect)obj).activateNerfEffect(); 
+		}*/
 	}
 	
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.GRAY);
-		g.fillRect(x, y, 15, 15);
+		g.fillRect(x_pos, y_pos, 15, 15);
 	}
 
 }

@@ -13,7 +13,7 @@ import java.awt.Color;
  */
 public class Enemy {
 
-    protected float x_pos;
+	protected float x_pos;
     protected float y_pos;
     protected float delta_x;
     protected float delta_y;

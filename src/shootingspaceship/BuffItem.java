@@ -13,15 +13,15 @@ public class BuffItem extends Item {
 	
 	@Override
 	public void applyTo(Object obj) {
-		if (obj instanceof Player) {
-			scoreSystem.addScore(20);
+		if (obj instanceof ScoreReceiver) {
+			((ScoreReceiver)obj).addScore(20);
 		}
 	}
 	
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(x, y, 15, 15);
+		g.fillRect(x_pos, y_pos, 15, 15);
 	}
 
 }

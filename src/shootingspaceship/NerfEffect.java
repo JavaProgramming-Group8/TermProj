@@ -1,8 +1,7 @@
 package shootingspaceship;
 
-import java.awt.event.KeyEvent;
+import java.awt.*;
 
 public interface NerfEffect {
 	void activateNerfEffect();
-	
 }
