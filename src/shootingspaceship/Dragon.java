@@ -4,12 +4,8 @@ import java.util.*;
 
 public class Dragon extends Player {
 	
-	private double gauge = 0;
-	private final int GAUGE_COST = 5;
-	private final int SHOT_DELAY = 50;
-	private long lastShotTime = 0;
-	
 	protected boolean firing = false;
+	private boolean fireOnce = true;
 	private ScoreSystem scoreSystem = new ScoreSystem();
 	private GaugeBar gaugeBar = new GaugeBar(20, 20, 100, 10);
 	
@@ -53,57 +49,83 @@ public class Dragon extends Player {
 		return scoreSystem;
 	}
 	
-	public List<Shot> fire()
+	public void setScoreSystem(ScoreSystem scoreSystem)
 	{
-		long currentTime = System.currentTimeMillis();
+		this.scoreSystem = scoreSystem;
+	}
+	
+	public void resetFireOnce()
+	{
+		fireOnce = true;
+	}
+	
+	@Override
+	public Shot generateShot()
+	{
+		List<Shot> shots = generateShots();
 		
-		if (currentTime - lastShotTime < SHOT_DELAY)
+		if ((shots == null) || shots.isEmpty())
 		{
-			return Collections.emptyList();
-		}
-		
-		int gaugeValue = gaugeBar.getCurrentGauge();
-		
-		List<Shot> shots = new ArrayList<>();
-		
-		boolean filledGauge = gaugeValue > 0;
-		
-		if (filledGauge)
-		{
-			gaugeBar.decreaseGauge(GAUGE_COST);
+			return null;
 		}
 		
 		else
 		{
-			if (firing)
+			return shots.get(0);
+		}
+	}
+	
+	public List<Shot> generateShots()
+	{
+		int score = scoreSystem.getScore();
+		
+		DragonShot currentWeapon;
+		
+		if (score >= 200)
+		{
+			currentWeapon = new ThreeWayShot(getX(), getY());
+		}
+		
+		else if (score >= 100)
+		{
+			currentWeapon = new DoubleShot(getX(), getY());
+		}
+		
+		else
+		{
+			currentWeapon = new NormalShot(getX(), getY());
+		}
+		
+		if (gaugeBar.getCurrentGauge() <= 0)
+		{
+			if (isFiring())
 			{
+				if (fireOnce)
+				{
+					fireOnce = false;
+					
+					return currentWeapon.fire();
+				}
+				
+				else
+				{
+					return Collections.emptyList();
+				}
+			}
+			
+			else
+			{
+				fireOnce = true;
 				return Collections.emptyList();
 			}
 		}
 		
-		DragonShot weapon;
-		int score = scoreSystem.getScore();
-		
-		if (score >= 300)
+		if (isFiring())
 		{
-			weapon = new ThreeWayShot(getX(), getY());
+			gaugeBar.decreaseGauge(5);
 		}
 		
-		else if (score >= 200)
-		{
-			weapon = new DoubleShot(getX(), getY());
-		}
-		
-		else
-		{
-			weapon = new NormalShot(getX(), getY());
-		}
-		
-		shots.addAll(weapon.fire());
-		lastShotTime = currentTime;
-		
-		return shots;
-		
+		return currentWeapon.fire();
 	}
 	
 }

@@ -1,13 +1,19 @@
 package shootingspaceship;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 
 public class BossLevel extends GameWithPause{
 	protected Boss boss;
 	protected ArrayList<EnemyShot> bossShots;
 	protected int bossShotSpeed = 3;
+	
+	private long lastFireTime = 0;
+	private final long FIRE_INTERVAL = 200;
 
 	public BossLevel(JFrame frame) {
 		super(frame);
@@ -22,13 +28,12 @@ public class BossLevel extends GameWithPause{
 
 		bossShots = new ArrayList<>();
 
-		this.player = new Dragon(
-			250,
-			400,
-			0,
-			500,
-			new Attack("NORMAL")
-		);
+		this.player = new Dragon(250, 400, 0, 500);
+		
+
+		addKeyListener(new BossKeyListener());
+		setFocusable(true);
+		requestFocusInWindow();
 	}
 	
 	private void bossColliededWithShot() {
@@ -63,12 +68,101 @@ public class BossLevel extends GameWithPause{
         }
 	}
 	
+    private class BossKeyListener implements KeyListener {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                if (player instanceof Dragon) {
+                    Dragon dragon = (Dragon) player;
+                    dragon.setFiring(true);
+                }
+            }
+
+            switch (e.getKeyCode())
+            {
+            case KeyEvent.VK_LEFT:
+            	playerMoveRight = false;
+            	playerMoveLeft = true;
+            	break;
+            	
+        	case KeyEvent.VK_RIGHT:
+        		playerMoveRight = true;
+        		playerMoveLeft = false;
+        		break;
+        	}
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e)
+        {
+            if (e.getKeyCode() == KeyEvent.VK_UP)
+            {
+                if (player instanceof Dragon)
+                {
+                    Dragon dragon = (Dragon) player;
+                    dragon.setFiring(false);
+                    dragon.resetFireOnce();
+                }
+            }
+
+            switch (e.getKeyCode())
+            {
+            case KeyEvent.VK_LEFT:
+            	playerMoveLeft = false;
+            	break;
+            	
+        	case KeyEvent.VK_RIGHT:
+        		playerMoveRight = false;
+        		break;
+        	}
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+    }
+	
 	@Override
 	public void run() {
 		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
 		while (true) {
 			if (!isPaused) { // ★ 일시정지 체크 추가
+	        	if (player instanceof Dragon)
+	        	{
+	        		Dragon dragon = (Dragon) player;
+	        		
+	        		if (dragon.isFiring())
+	        		{
+	        			long now = System.currentTimeMillis();
+	        			
+	        			if (now - lastFireTime >= FIRE_INTERVAL)
+	        			{
+	        				List<Shot> newShots = dragon.generateShots();
+	        				
+	        				for (Shot s : newShots)
+	        				{
+	        					for (int i=0; i<shots.length; ++i)
+			        			{
+			        				if (shots[i] == null)
+			        				{
+			        					shots[i] = s;
+			        					
+			        					break;
+			        				}
+			        			}
+	        				}
+
+		        			lastFireTime = now;
+	        			}
+	        		}
+	        		
+	        		else
+	        		{
+	        			dragon.rechargeGauge();
+	        		}
+	        	}
+				
 			 for (int i = 0; i < shots.length; i++) {
 	                if (shots[i] != null) {
 	                	shots[i].moveShot(shotSpeed);
@@ -83,7 +177,7 @@ public class BossLevel extends GameWithPause{
              } else if (playerMoveRight) {
                  player.moveX(playerRightSpeed);
              }
-
+			 
              Iterator<Enemy> enemyList = enemies.iterator();
              while (enemyList.hasNext()) {
                  Enemy enemy = (Enemy) enemyList.next();
@@ -143,7 +237,25 @@ public class BossLevel extends GameWithPause{
         	}
         }
         
-        
+        if (player instanceof Dragon) {
+            Dragon dragon = (Dragon) player;
+            int gauge = dragon.getGauge();
+            int barW = 200;
+            int barH = 15;
+            int barX = (getWidth() - barW) / 2;
+            int barY = getHeight() - barH - 30;
+
+            double gaugeRatio = gauge / 100.0;
+            int filledWidth = (int) (barW * gaugeRatio);
+
+            g.setColor(Color.GRAY);
+            g.fillRect(barX, barY, barW, barH);
+            g.setColor(Color.YELLOW);
+            g.fillRect(barX, barY, filledWidth, barH);
+            g.setColor(Color.BLACK);
+            g.drawRect(barX, barY, barW, barH);
+        }
+
 	}
 	
 	public void triggerGameClear() {

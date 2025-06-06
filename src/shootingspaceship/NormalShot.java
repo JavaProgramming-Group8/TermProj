@@ -1,5 +1,7 @@
 package shootingspaceship;
 
+import java.util.*;
+
 public class NormalShot extends DragonShot {
 	
 	private int x, y;
@@ -12,12 +14,12 @@ public class NormalShot extends DragonShot {
 	}
 	
 	@Override
-	public Shot[] createShots()
+	public List<Shot> fire()
 	{
-		return new Shot[]
-				{
-						new Shot(x, y)
-				};
+		List<Shot> shots = new ArrayList<>();
+		shots.add(new Shot (x, y));
+		
+		return shots;
 	}
 
 }

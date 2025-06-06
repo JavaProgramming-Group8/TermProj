@@ -17,20 +17,6 @@ public class GaugeBar {
 		this.height = height;
 	}
 	
-	public void draw(Graphics g, double percent)
-	{
-		g.setColor(Color.GRAY);
-		g.fillRect(x, y, width, height);
-		
-		g.setColor(Color.YELLOW);
-		
-		int filledWidth = (int)(width * (percent / 100.0));
-		g.fillRect(x, y, width, height);
-		
-		g.setColor(Color.BLACK);
-		g.fillRect(x, y, width, height);
-	}
-	
 	public int getCurrentGauge()
 	{
 		return (int) currentGauge;
@@ -44,5 +30,13 @@ public class GaugeBar {
 	public void decreaseGauge(double amount)
 	{
 		currentGauge = Math.max(currentGauge - amount, MIN_GAUGE);
+	}
+	
+	public void setPosition(int x, int y, int width, int height)
+	{
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height =height;
 	}
 }

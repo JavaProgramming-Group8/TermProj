@@ -9,10 +9,17 @@ public abstract class DragonShot extends Shot {
 		super(x, y);
 	}
 	
-	public abstract Shot[] createShots();
+	public abstract List<Shot> fire();
 	
-	public List<Shot> fire()
+	public Shot generateShot()
 	{
-		return Arrays.asList(createShots());
+		List<Shot> shots = fire();
+		
+		if ((shots != null) && (!shots.isEmpty()))
+		{
+			return shots.get(0);
+		}
+		
+		return null;
 	}
 }

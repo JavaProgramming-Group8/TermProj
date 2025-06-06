@@ -3,6 +3,7 @@ package shootingspaceship;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 
 public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiver{
@@ -13,8 +14,10 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	private Random random;
 
 	private boolean isNerfMode = false;
-	private long nerfEndTime = 0; 
-
+	private long nerfEndTime = 0;
+	
+	private long lastFireTime = 0;
+	private final long FIRE_INTERVAL = 200;
 	
 	public LevelThree(JFrame frame) {
 		super(frame);
@@ -24,17 +27,12 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 		this.scoreLevelThree = new ScoreSystem();
 		this.random = new Random();
 
-		this.player = new Dragon(
-			250,
-			400,
-			0,
-			500,
-			new Attack("NORMAL")
-		);
+		this.player = new Dragon(250, 400, 0, 500);
+		Dragon dragon = (Dragon) this.player;
+		dragon.setScoreSystem(scoreLevelThree);
 
 		addKeyListener(new NerfKeyListener());
 
-		
 		if (timer != null) {
             timer.stop();
             for (ActionListener pastAL : timer.getActionListeners()) {
@@ -76,6 +74,15 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	
 	private class NerfKeyListener implements KeyListener{
 		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_UP)
+			{
+				if(player instanceof Dragon)
+				{
+					Dragon dragon = (Dragon) player;
+					dragon.setFiring(true);
+				}
+			}
+			
 			if(isNerfActive()) {
 				e.consume();
 				
@@ -89,22 +96,28 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
                     playerMoveRight = false;
                     break;
                 case KeyEvent.VK_DOWN:
-                    for (int i = 0; i < shots.length; i++) {
-                        if (shots[i] == null) {
-                            shots[i] = player.generateShot();
-                            break;
-                        }
-                    }
+                	if(player instanceof Dragon)
+					{
+						Dragon dragon = (Dragon) player;
+						dragon.setFiring(false);
+						dragon.resetFireOnce();
+					}
                     break;
-                
-                case KeyEvent.VK_UP:
-                	break;
-            }
-			} 
+                	}
+				} 
 			}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_UP)
+			{
+				if(player instanceof Dragon)
+				{
+					Dragon dragon = (Dragon) player;
+					dragon.setFiring(false);
+					dragon.resetFireOnce();
+				}
+			}
 			
 			if(isNerfActive()) {
 				e.consume();
@@ -115,7 +128,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 					break; 
 				case KeyEvent.VK_RIGHT:
 					playerMoveLeft = false;
-					break;
+					break;					
 				}
 			} 
 		}
@@ -142,60 +155,136 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	        }
 
 	        // ↓↓↓ 기존 게임 로직 ↓↓↓
+	        
+	        if (!isPaused)
+	        {
+	        	if (player instanceof Dragon)
+	        	{
+	        		Dragon dragon = (Dragon) player;
+	        		
+	        		if (dragon.isFiring())
+	        		{
+	        			long now = System.currentTimeMillis();
+	        			
+	        			if (now - lastFireTime >= FIRE_INTERVAL)
+	        			{
+	        				List<Shot> newShots = dragon.generateShots();
+	        				
+	        				for (Shot s : newShots)
+	        				{
+	        					for (int i=0; i<shots.length; ++i)
+			        			{
+			        				if (shots[i] == null)
+			        				{
+			        					shots[i] = s;
+			        					
+			        					break;
+			        				}
+			        			}
+	        				}
 
-	        for (int i = 0; i < shots.length; i++) {
-	            if (shots[i] != null) {
-	                shots[i].moveShot(shotSpeed);
-	                if (shots[i].getY() < 0) {
-	                    shots[i] = null;
-	                }
-	            }
-	        }
+		        			lastFireTime = now;
+	        			}
+	        		}
+	        		
+	        		else
+	        		{
+	        			dragon.rechargeGauge();
+	        		}
+	        	}
+	        	
+	        	for (int i = 0; i < shots.length; i++) {
+		            if (shots[i] != null) {
+		                shots[i].moveShot(shotSpeed);
+		                if (shots[i].getY() < 0) {
+		                    shots[i] = null;
+		                }
+		            }
+		        }
 
-	            if (playerMoveLeft) {
-	                player.moveX(playerLeftSpeed);
-	            } else if (playerMoveRight) {
-	                player.moveX(playerRightSpeed);
-	            }
+		        if (playerMoveLeft) {
+		            player.moveX(playerLeftSpeed);
+		        } else if (playerMoveRight) {
+		                player.moveX(playerRightSpeed);
+		        }
+		        
+		        boolean addSplitedEnemyNextFrame = false;
 
-	            Iterator<Enemy> enemyList = enemies.iterator();
-	            while (enemyList.hasNext()) {
-	                Enemy enemy = (Enemy) enemyList.next();
-	                enemy.move();
-	            }
-	            
-	            if (!splitedBaby.isEmpty()) {
-	                enemies.addAll(splitedBaby);
-	                splitedBaby.clear();
-	            }
-	            
-	            //아이템 아래로 이동 및 효과적용 
-	            Iterator<Item> it = items.iterator();
-	            while (it.hasNext()) {
-	            	Item item = it.next();
-	            	item.move();
-	            	
-	            	if(item.isCollideWithPlayer(player)) {
-	            		item.applyTo(this);
-	            		it.remove();
-	            		repaint();
+		        Iterator<Enemy> enemyList = enemies.iterator();
+		        while (enemyList.hasNext()) {
+		            Enemy enemy = (Enemy) enemyList.next();
+		            enemy.move();
+		            
+		            if (enemy.isCollidedWithShot(shots))
+		            {
+		            	int points = getPointsForEnemy(enemy);
+		            	scoreLevelThree.addScore(points);
+		            	
+		            	if (enemy instanceof SplitEnemy)
+		            	{
+		            		SplitEnemy splitEnemy = (SplitEnemy) enemy;
+		            		ArrayList<BasicEnemy> babyEnemies = splitEnemy.generateEnemy(splitEnemy.babyMaxDownSpeed, splitEnemy.babyMaxHorizonSpeed);
+		            		
+		            		if (babyEnemies != null)
+		            		{
+		            			splitedBaby.addAll(babyEnemies);
+		            			addSplitedEnemyNextFrame = true;
+		            		}
+		            	}
+		            	
+		            	else if (enemy instanceof ItemEnemy)
+	            		{
+	            			ItemEnemy itemEnemy = (ItemEnemy) enemy;
+	            			Item item = itemEnemy.generateItem();
+	            			
+	            			if (item != null)
+	            			{
+	            				items.add(item);
+	            			}
+	            		}
+	            		
+	            		enemyList.remove();
+		            }
+		            
+		            if (enemy.isCollidedWithPlayer(player))
+	            	{
+	            		triggerGameOver();
 	            	}
+		        }
+		        
+		        if (addSplitedEnemyNextFrame)
+	            {
+	            	enemies.addAll(splitedBaby);
+	            	splitedBaby.clear();
 	            }
+		            
+		            //아이템 아래로 이동 및 효과적용 
+		        Iterator<Item> it = items.iterator();
+		        while (it.hasNext()) {
+		        	Item item = it.next();
+		        	item.move();
+		            	
+		            if(item.isCollideWithPlayer(player)) {
+		            	item.applyTo(this);
+		            	it.remove();
+		            	repaint();
+		            }
+		        }
 
-	            
-	            if(scoreLevelThree.getScore() > 300) {
-	            	scoreLevelThree.scoreReset();
-	            	bossLevelTrigger();
-	            }
+		            
+		        if(scoreLevelThree.getScore() > 300) {
+		            scoreLevelThree.scoreReset();
+		            bossLevelTrigger();
+		        }
 
-	            repaint();
+		        repaint();
 
-	            try {
-	                Thread.sleep(10);
-	            } catch (InterruptedException ex) {
-	            	
-	            }
-
+		        try {
+		            Thread.sleep(10);
+		        } catch (InterruptedException ex) {
+		            	
+		        }
+	        }
 	            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 	        }
 	}
@@ -295,21 +384,28 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
                 shots[i].drawShot(g);
             }
         }
+        
+        if (player instanceof Dragon)
+        {
+        	Dragon dragon = (Dragon) player;
+        	int gauge = dragon.getGauge();
+        	int barW = 200;
+        	int barH = 15;
+        	int barX = (getWidth()-barW)/2;
+        	int barY = getHeight()-barH-30;
+        	
+        	double gaugeRatio = gauge/100.0;
+        	int filledWidth = (int)(barW * gaugeRatio);
+        	
+        	g.setColor(Color.GRAY);
+        	g.fillRect(barX, barY, barW, barH);
+        	g.setColor(Color.YELLOW);
+        	g.fillRect(barX, barY, filledWidth, barH);
+        	g.setColor(Color.BLACK);
+        	g.drawRect(barX, barY, barW, barH);
+        }
 		
 		
 	}
-	/*
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Boss Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        LevelThree gamePanel = new LevelThree(frame);
-        frame.getContentPane().add(gamePanel, null); 
-        frame.pack(); 
-        frame.setResizable(false);
-        frame.setVisible(true); 
-
-        gamePanel.start(); 
-    }
-	*/
 }
 
