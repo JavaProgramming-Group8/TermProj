@@ -6,7 +6,7 @@ import java.util.Iterator;
 import javax.swing.*;
 
 public class GameWithPause extends Shootingspaceship {
-    private boolean isPaused = false;
+    protected boolean isPaused = false;
     private boolean isGameOver = false;
     private JFrame frame;
 

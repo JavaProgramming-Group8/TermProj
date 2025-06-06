@@ -1,9 +1,9 @@
 package shootingspaceship;
 
 import java.awt.*;
-import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.*;
 
 public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiver{
 	private JFrame frame;
@@ -123,10 +123,11 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	
 	@Override
 	public void run() {
-		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-		
-		 while (true) {
-	           
+	    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+
+	    while (true) {
+	        // ★ 일시정지 체크 추가
+	        if (!isPaused) {
 	            for (int i = 0; i < shots.length; i++) {
 	                if (shots[i] != null) {
 	                    shots[i].moveShot(shotSpeed);
@@ -144,44 +145,43 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 
 	            Iterator<Enemy> enemyList = enemies.iterator();
 	            while (enemyList.hasNext()) {
-	                Enemy enemy = (Enemy) enemyList.next();
+	                Enemy enemy = enemyList.next();
 	                enemy.move();
 	            }
-	            
+
 	            if (!splitedBaby.isEmpty()) {
 	                enemies.addAll(splitedBaby);
 	                splitedBaby.clear();
 	            }
-	            
-	            //아이템 아래로 이동 및 효과적용 
+
+	            // 아이템 이동 및 효과 적용
 	            Iterator<Item> it = items.iterator();
 	            while (it.hasNext()) {
-	            	Item item = it.next();
-	            	item.move();
-	            	
-	            	if(item.isCollideWithPlayer(player)) {
-	            		item.applyTo(this);
-	            		it.remove();
-	            		repaint();
-	            	}
+	                Item item = it.next();
+	                item.move();
+
+	                if (item.isCollideWithPlayer(player)) {
+	                    item.applyTo(this);
+	                    it.remove();
+	                    repaint();
+	                }
 	            }
 
-	            
-	            if(scoreLevelThree.getScore() > 300) {
-	            	scoreLevelThree.scoreReset();
-	            	bossLevelTrigger();
+	            if (scoreLevelThree.getScore() > 300) {
+	                scoreLevelThree.scoreReset();
+	                bossLevelTrigger();
 	            }
 
 	            repaint();
-
-	            try {
-	                Thread.sleep(10);
-	            } catch (InterruptedException ex) {
-	            	
-	            }
-
-	            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 	        }
+
+	        try {
+	            Thread.sleep(10);
+	        } catch (InterruptedException ex) {
+	        }
+
+	        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+	    }
 	}
 	
 	private int getPointsForEnemy(Enemy enemy) {

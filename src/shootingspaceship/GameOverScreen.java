@@ -2,6 +2,8 @@ package shootingspaceship;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameOverScreen extends JPanel {
     public GameOverScreen(JFrame frame) {
@@ -26,8 +28,23 @@ public class GameOverScreen extends JPanel {
             frame.repaint();
         });
 
+        JButton retryButton = new JButton("다시하기");
+        retryButton.setBounds(150, 300, 200, 50);
+        retryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.getContentPane().removeAll();
+                StartScreen startScreen = new StartScreen(frame);
+                startScreen.setBounds(0, 0, 500, 500);
+                frame.add(startScreen);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
         center.add(label);
         center.add(restart);
+        center.add(retryButton);
 
         add(center, BorderLayout.CENTER); // 가운데 정렬
     }

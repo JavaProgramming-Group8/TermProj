@@ -10,7 +10,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
     protected Thread th;
     protected Player player;
     protected Shot[] shots;
-    protected ArrayList enemies;
+    protected ArrayList<Enemy> enemies;
     protected final int shotSpeed = -2;
     protected final int playerLeftSpeed = -2;
     protected final int playerRightSpeed = 2;
@@ -36,7 +36,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
         setPreferredSize(new Dimension(width, height));
         player = new Player(width / 2, (int) (height * 0.9), playerMargin, width-playerMargin );
         shots = new Shot[ maxShotNum ];
-        enemies = new ArrayList();
+        enemies = new ArrayList<Enemy>();
         enemySize = 0;
         rand = new Random(1);
         timer = new javax.swing.Timer(enemyTimeGap, new addANewEnemy());

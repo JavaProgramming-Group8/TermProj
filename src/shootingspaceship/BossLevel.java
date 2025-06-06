@@ -9,9 +9,6 @@ public class BossLevel extends GameWithPause{
 	protected ArrayList<EnemyShot> bossShots;
 	protected int bossShotSpeed = 3;
 
-    private JFrame frame;
-    private boolean isGameOver = false;
-	
 	public BossLevel(JFrame frame) {
 		super(frame);
 		
@@ -62,8 +59,9 @@ public class BossLevel extends GameWithPause{
 	@Override
 	public void run() {
 		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-		
-		while(true) {
+
+		while (true) {
+			if (!isPaused) { // ★ 일시정지 체크 추가
 			 for (int i = 0; i < shots.length; i++) {
 	                if (shots[i] != null) {
 	                	shots[i].moveShot(shotSpeed);
@@ -108,14 +106,12 @@ public class BossLevel extends GameWithPause{
              playerColliededWithShot();
              
              repaint();
+			}
+			try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {}
 
-             try {
-                 Thread.sleep(10);
-             } catch (InterruptedException ex) {
-                 
-             }
-
-             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		}
 	}
 	
