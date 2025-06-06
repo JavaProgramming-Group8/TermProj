@@ -1,16 +1,24 @@
 package shootingspaceship;
 
-public class DoubleShot extends Shot {
-	private int power;
+public class DoubleShot extends DragonShot {
 	
-	public DoubleShot(int x, int y)
-	{
+	private int x, y;
+
+	public DoubleShot(int x, int y) {
+		// TODO Auto-generated method stub
 		super(x, y);
-		this.power = 2;
+		this.x = x;
+		this.y = y;
 	}
 	
-	public int getPower()
+	@Override
+	public Shot[] createShots()
 	{
-		return power;
+		return new Shot[]
+				{
+						new NormalShot(x-10, y),
+						new NormalShot(x+10, y)
+				};
 	}
+
 }

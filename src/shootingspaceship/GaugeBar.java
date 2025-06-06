@@ -24,6 +24,7 @@ public class GaugeBar {
 		
 		g.setColor(Color.YELLOW);
 		
+		int filledWidth = (int)(width * (percent / 100.0));
 		g.fillRect(x, y, width, height);
 		
 		g.setColor(Color.BLACK);
