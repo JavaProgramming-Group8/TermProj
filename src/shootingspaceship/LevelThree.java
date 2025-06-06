@@ -5,15 +5,15 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class LevelThree extends GameWithPause implements NerfEffect{
+public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiver{
 	private JFrame frame;
 	private ArrayList<BasicEnemy> splitedBaby;
 	private ArrayList<Item> items;
 	protected ScoreSystem scoreLevelThree;
 	private Random random;
 
-	private boolean nerfed = false;
-	private long nerfTime = 0; 
+	private boolean isNerfMode = false;
+	private long nerfEndTime = 0; 
 
 	
 	public LevelThree(JFrame frame) {
@@ -23,6 +23,9 @@ public class LevelThree extends GameWithPause implements NerfEffect{
 		this.items = new ArrayList<>();
 		this.scoreLevelThree = new ScoreSystem();
 		this.random = new Random();
+		
+		addKeyListener(new NerfKeyListener());
+
 		
 		if (timer != null) {
             timer.stop();
@@ -63,6 +66,61 @@ public class LevelThree extends GameWithPause implements NerfEffect{
 		}
 	}
 	
+	private class NerfKeyListener implements KeyListener{
+		public void keyPressed(KeyEvent e) {
+			if(isNerfActive()) {
+				e.consume();
+				
+				switch (e.getKeyCode()) {
+                case KeyEvent.VK_LEFT:
+                    playerMoveRight = true;
+                    playerMoveLeft = false;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    playerMoveLeft = true;
+                    playerMoveRight = false;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    for (int i = 0; i < shots.length; i++) {
+                        if (shots[i] == null) {
+                            shots[i] = player.generateShot();
+                            break;
+                        }
+                    }
+                    break;
+                
+                case KeyEvent.VK_UP:
+                	break;
+            }
+			} 
+			}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			
+			if(isNerfActive()) {
+				e.consume();
+				
+				switch(e.getKeyCode()) {
+				case KeyEvent.VK_LEFT:
+					playerMoveRight = false; 
+					break; 
+				case KeyEvent.VK_RIGHT:
+					playerMoveLeft = false;
+					break;
+				}
+			} 
+		}
+		
+		@Override
+		public void keyTyped(KeyEvent e) {
+			if (isNerfActive()) {
+				e.consume();
+			}
+		}
+	}
+
+	
 	@Override
 	public void run() {
 		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
@@ -101,11 +159,13 @@ public class LevelThree extends GameWithPause implements NerfEffect{
 	            	Item item = it.next();
 	            	item.move();
 	            	
-	            	if(item.isCollideWith(player)) {
-	            		item.applyTo(player);
+	            	if(item.isCollideWithPlayer(player)) {
+	            		item.applyTo(this);
 	            		it.remove();
+	            		repaint();
 	            	}
 	            }
+
 	            
 	            if(scoreLevelThree.getScore() > 300) {
 	            	scoreLevelThree.scoreReset();
@@ -138,33 +198,21 @@ public class LevelThree extends GameWithPause implements NerfEffect{
 	}
 	
 	//nerf item 동작
-	public void activateNerfEffect() {
-		System.out.println("효과제발");
-		nerfed = true;
-		nerfTime = System. currentTimeMillis() + 15000;
-	}
-	
-	private boolean isNerfActive() {
-		return nerfed && System.currentTimeMillis() < nerfTime;
-	}
-	
-	public void NerfKey(KeyEvent e) {
-		int key = e.getKeyCode();
-		
-		if(key == KeyEvent.VK_LEFT) {
-			playerMoveRight = true;
-		} else if (key == KeyEvent.VK_RIGHT) {
-			playerMoveLeft = true;
-		} else if (key == KeyEvent.VK_DOWN) {
-			for (int i = 0; i < shots.length; ++i) {
-				if (shots[i] == null) {
-					shots[i] = player.generateShot();
-					break;
-				}
-			}
+		public void startNerfEffect() {
+			isNerfMode = true; 
+			nerfEndTime = System.currentTimeMillis() + 15000;
 		}
 		
-	}
+		private boolean isNerfActive() {
+			return isNerfMode && System.currentTimeMillis() < nerfEndTime;
+		}
+		
+		//buff
+		@Override
+		public void addScore(int point) {
+			scoreLevelThree.addScore(point);
+		}
+
 	
 	public void bossLevelTrigger() {
 		frame.getContentPane().removeAll();

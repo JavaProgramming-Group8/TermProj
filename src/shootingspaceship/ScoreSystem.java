@@ -14,4 +14,9 @@ public class ScoreSystem {
     public int getScore() {
         return totalScore;
     }
+    
+    public void scoreReset() {
+    	totalScore = 0;
+    }
+
 }

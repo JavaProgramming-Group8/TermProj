@@ -3,107 +3,28 @@ package shootingspaceship;
 import java.util.*;
 
 public class Dragon extends Player {
+	private Attack attack;
 	
-	private double gauge = 0;
-	private final int GAUGE_COST = 5;
-	private final int SHOT_DELAY = 50;
-	private long lastShotTime = 0;
-	
-	protected boolean firing = false;
-	private ScoreSystem scoreSystem = new ScoreSystem();
-	private GaugeBar gaugeBar = new GaugeBar(20, 20, 100, 10);
-	
-	public Dragon(int x, int y, int min_x, int max_x)
+	public Dragon (int x, int y, int min_x, int max_x, Attack attack)
 	{
 		super(x, y, min_x, max_x);
+		this.attack = attack;
 	}
 	
-	public void setFiring(boolean firing)
+	@Override
+	public Shot generateShot()
 	{
-		this.firing = firing;
+		ArrayList<Shot> shots = attack.fire(this.getX(), this.getY());
+		return shots.get(0);
 	}
 	
-	public boolean isFiring()
+	public ArrayList<Shot> generateShots()
 	{
-		return this.firing;
+		return attack.fire(this.getX(), this.getY());
 	}
 	
-	public void rechargeGauge()
+	public void setAttack(Attack attack)
 	{
-		rechargeGauge(0.5);
+		this.attack = attack;
 	}
-	
-	public void rechargeGauge(double amount)
-	{
-		gaugeBar.increaseGauge(amount);
-	}
-	
-	public int getGauge()
-	{
-		return gaugeBar.getCurrentGauge();
-	}
-	
-	public GaugeBar getGaugeBar()
-	{
-		return gaugeBar;
-	}
-	
-	public ScoreSystem getScoreSystem()
-	{
-		return scoreSystem;
-	}
-	
-	public List<Shot> fire()
-	{
-		long currentTime = System.currentTimeMillis();
-		
-		if (currentTime - lastShotTime < SHOT_DELAY)
-		{
-			return Collections.emptyList();
-		}
-		
-		int gaugeValue = gaugeBar.getCurrentGauge();
-		
-		List<Shot> shots = new ArrayList<>();
-		
-		boolean filledGauge = gaugeValue > 0;
-		
-		if (filledGauge)
-		{
-			gaugeBar.decreaseGauge(GAUGE_COST);
-		}
-		
-		else
-		{
-			if (firing)
-			{
-				return Collections.emptyList();
-			}
-		}
-		
-		DragonShot weapon;
-		int score = scoreSystem.getScore();
-		
-		if (score >= 300)
-		{
-			weapon = new ThreeWayShot(getX(), getY());
-		}
-		
-		else if (score >= 200)
-		{
-			weapon = new DoubleShot(getX(), getY());
-		}
-		
-		else
-		{
-			weapon = new NormalShot(getX(), getY());
-		}
-		
-		shots.addAll(weapon.fire());
-		lastShotTime = currentTime;
-		
-		return shots;
-		
-	}
-	
 }
