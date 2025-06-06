@@ -2,7 +2,6 @@ package shootingspaceship;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class GameOverScreen extends JPanel {
     public GameOverScreen(JFrame frame) {

@@ -132,7 +132,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
                 player.moveX(playerRightSpeed);
             }
 
-            Iterator enemyList = enemies.iterator();
+            Iterator<Enemy> enemyList = enemies.iterator();
             while (enemyList.hasNext()) {
                 Enemy enemy = (Enemy) enemyList.next();
                 enemy.move();
@@ -171,7 +171,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
         // draw player
         player.drawPlayer(g);
 
-        Iterator enemyList = enemies.iterator();
+        Iterator<Enemy> enemyList = enemies.iterator();
         while (enemyList.hasNext()) {
             Enemy enemy = (Enemy) enemyList.next();
             enemy.draw(g);

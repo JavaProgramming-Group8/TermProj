@@ -40,7 +40,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	private class addANewEnemyLevelThree implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-	        int randomPosX = (int) (random.nextFloat() * width);
+ 	        int randomPosX = (int) (random.nextFloat() * width);
 	        float downSpeed = random.nextFloat() * enemyMaxDownSpeed * 2;
 	        float horSpeed = random.nextFloat() * 2 * enemyMaxHorizonSpeed - enemyMaxHorizonSpeed;
 	        Enemy newEnemy = null;
@@ -142,7 +142,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	                player.moveX(playerRightSpeed);
 	            }
 
-	            Iterator enemyList = enemies.iterator();
+	            Iterator<Enemy> enemyList = enemies.iterator();
 	            while (enemyList.hasNext()) {
 	                Enemy enemy = (Enemy) enemyList.next();
 	                enemy.move();
@@ -234,7 +234,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 		
 		player.drawPlayer(g);
 		
-		Iterator enemyList = enemies.iterator();
+		Iterator<Enemy> enemyList = enemies.iterator();
         while (enemyList.hasNext()) {
             Enemy enemy = (Enemy) enemyList.next();
             enemy.draw(g);
@@ -263,7 +263,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
             }
         }
         
-        Iterator itemList = items.iterator();
+        Iterator<Item> itemList = items.iterator();
         while (itemList.hasNext()) {
         	Item item = (Item) itemList.next();
         	item.draw(g);
@@ -282,7 +282,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 		
 		
 	}
-	
+	/*
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Boss Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -294,6 +294,6 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 
         gamePanel.start(); 
     }
-
+	*/
 }
 

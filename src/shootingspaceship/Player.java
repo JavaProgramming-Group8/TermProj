@@ -10,8 +10,6 @@ import java.awt.Color;
  *
  * @author wgpak
  */
-import java.awt.Graphics;
-import java.awt.Color;
 
 public class Player {
 	protected int x_pos;

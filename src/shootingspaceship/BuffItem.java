@@ -1,7 +1,6 @@
 package shootingspaceship;
 
 import java.awt.*;
-import shootingspaceship.Player;
 
 public class BuffItem extends Item {
 	protected ScoreSystem scoreSystem;

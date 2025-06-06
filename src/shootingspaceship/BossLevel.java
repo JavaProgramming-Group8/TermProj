@@ -2,7 +2,6 @@ package shootingspaceship;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.*;
 
 public class BossLevel extends GameWithPause{
@@ -41,7 +40,7 @@ public class BossLevel extends GameWithPause{
 	}
 	
 	private void playerColliededWithShot() {
-		Iterator enemyShotList = bossShots.iterator();
+		Iterator<EnemyShot> enemyShotList = bossShots.iterator();
         while (enemyShotList.hasNext()) {
         	EnemyShot shot = (EnemyShot) enemyShotList.next();
            	
@@ -80,7 +79,7 @@ public class BossLevel extends GameWithPause{
                  player.moveX(playerRightSpeed);
              }
 
-             Iterator enemyList = enemies.iterator();
+             Iterator<Enemy> enemyList = enemies.iterator();
              while (enemyList.hasNext()) {
                  Enemy enemy = (Enemy) enemyList.next();
                  enemy.move();
@@ -94,7 +93,7 @@ public class BossLevel extends GameWithPause{
                  }
              }
              
-             Iterator enemyShotList = bossShots.iterator();
+             Iterator<EnemyShot> enemyShotList = bossShots.iterator();
              while (enemyShotList.hasNext()) {
             	 EnemyShot shot = (EnemyShot) enemyShotList.next();
             	 shot.moveShot(bossShotSpeed);
