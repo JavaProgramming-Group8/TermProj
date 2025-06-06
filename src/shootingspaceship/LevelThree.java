@@ -29,12 +29,9 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
         this.scoreLevelThree = new ScoreSystem();
         this.random = new Random();
 
-        // 배경 이미지 로드 (이미지는 src/shootingspaceship/background.jpg에 위치)
         java.net.URL imgUrl = getClass().getResource("/shootingspaceship/background2.jpg");
         if (imgUrl != null) {
             backgroundImage = new ImageIcon(imgUrl).getImage();
-        } else {
-            System.out.println("배경 이미지가 없습니다: /shootingspaceship/background.jpg");
         }
 
         this.player = new Dragon(250, 400, 0, 500);
@@ -161,11 +158,9 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	            try {
 	                Thread.sleep(10);
 	            } catch (InterruptedException ex) {}
-	            continue; // 일시정지 상태면 아래 로직을 건너뜀
+	            continue; 
 	        }
 
-	        // ↓↓↓ 기존 게임 로직 ↓↓↓
-	        
 	        if (!isPaused)
 	        {
 	        	if (player instanceof Dragon)
@@ -268,7 +263,6 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	            	splitedBaby.clear();
 	            }
 		            
-		            //아이템 아래로 이동 및 효과적용 
 		        Iterator<Item> it = items.iterator();
 		        while (it.hasNext()) {
 		        	Item item = it.next();
@@ -312,7 +306,6 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	    return 0; 
 	}
 	
-	//nerf item 동작
 		public void startNerfEffect() {
 			isNerfMode = true; 
 			nerfEndTime = System.currentTimeMillis() + 15000;
@@ -322,7 +315,6 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 			return isNerfMode && System.currentTimeMillis() < nerfEndTime;
 		}
 		
-		//buff
 		@Override
 		public void addScore(int point) {
 			scoreLevelThree.addScore(point);
@@ -345,7 +337,6 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	
 	@Override
 	public void paintComponent(Graphics g) {
-        // 배경 그리기
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         } else {
@@ -353,72 +344,43 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
             g.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        player.drawPlayer(g);
-
-        Iterator<Enemy> enemyList = enemies.iterator();
-        while (enemyList.hasNext()) {
-            Enemy enemy = (Enemy) enemyList.next();
-            enemy.draw(g);
-            if (enemy.isCollidedWithShot(shots)) {
-            	int points = getPointsForEnemy(enemy);
-            	scoreLevelThree.addScore(points);
-            	
-                if(enemy instanceof SplitEnemy) {
-                	SplitEnemy splitEnemy = (SplitEnemy) enemy;
-                    ArrayList<BasicEnemy> babyEnemies = splitEnemy.generateEnemy(splitEnemy.babyMaxDownSpeed, splitEnemy.babyMaxHorizonSpeed);
-                    if (babyEnemies != null) {
-                        splitedBaby.addAll(babyEnemies);
-                    }
-                } 
-                else if(enemy instanceof ItemEnemy) {
-                	ItemEnemy itemEnemy = (ItemEnemy) enemy;
-                	Item item = itemEnemy.generateItem();
-                	if(item != null) {
-                		items.add(item);
-                	}
-                }
-                enemyList.remove();
-            }
-            if (enemy.isCollidedWithPlayer(player)) {
-                triggerGameOver();
-            }
-        }
-        
-        Iterator<Item> itemList = items.iterator();
-        while (itemList.hasNext()) {
-        	Item item = (Item) itemList.next();
-        	item.draw(g);
-        }
-        
         g.setColor(Color.WHITE);
         g.setFont(new Font("맑은 고딕", Font.BOLD, 16));
         g.drawString("Score: " + scoreLevelThree.getScore(), 10, 40);
-        
-        
+
+        for (Item item : items) {
+            item.draw(g);
+        }
+
+        for (Enemy enemy : enemies) {
+            enemy.draw(g);
+        }
+
+        player.drawPlayer(g);
+
         for (int i = 0; i < shots.length; i++) {
             if (shots[i] != null) {
                 shots[i].drawShot(g);
             }
         }
-        
-        if (player instanceof Dragon)
-        {
-        	Dragon dragon = (Dragon) player;
-        	int gauge = dragon.getGauge();
-        	int barW = 200;
-        	int barH = 15;
-        	int barX = (getWidth()-barW)/2;
-        	int barY = getHeight()-barH-30;
-        	
-        	double gaugeRatio = gauge/100.0;
-        	int filledWidth = (int)(barW * gaugeRatio);
-        	
-        	g.setColor(Color.GRAY);
-        	g.fillRect(barX, barY, barW, barH);
-        	g.setColor(Color.YELLOW);
-        	g.fillRect(barX, barY, filledWidth, barH);
-        	g.setColor(Color.BLACK);
-        	g.drawRect(barX, barY, barW, barH);
+
+        if (player instanceof Dragon) {
+            Dragon dragon = (Dragon) player;
+            int gauge = dragon.getGauge();
+            int barW = 200;
+            int barH = 15;
+            int barX = (getWidth()-barW)/2;
+            int barY = getHeight()-barH-30;
+
+            double gaugeRatio = gauge/100.0;
+            int filledWidth = (int)(barW * gaugeRatio);
+
+            g.setColor(Color.GRAY);
+            g.fillRect(barX, barY, barW, barH);
+            g.setColor(Color.YELLOW);
+            g.fillRect(barX, barY, filledWidth, barH);
+            g.setColor(Color.BLACK);
+            g.drawRect(barX, barY, barW, barH);
         }
 		
 		
