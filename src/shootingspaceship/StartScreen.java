@@ -6,20 +6,15 @@ import java.awt.event.*;
 
 public class StartScreen extends JPanel {
     private JFrame frame;
-    private Image backgroundImage; // 배경 이미지 변수 추가
+    private Image backgroundImage;
 
     public StartScreen(JFrame frame) {
         this.frame = frame;
-        // 경로 확인용 출력
         java.net.URL imgUrl = getClass().getResource("/shootingspaceship/background.jpg");
-        System.out.println("이미지 경로: " + imgUrl);
-        if (imgUrl == null) {
-            JOptionPane.showMessageDialog(this, "background.jpg 파일을 src/shootingspaceship/에 넣어주세요!");
-        }
         backgroundImage = imgUrl != null ? new ImageIcon(imgUrl).getImage() : null;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setOpaque(false); // 배경 투명하게
+        setOpaque(false);
         setBackground(Color.BLACK);
 
         JLabel title = new JLabel("슈팅 게임", SwingConstants.CENTER);
@@ -92,7 +87,6 @@ public class StartScreen extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // 배경 이미지 그리기
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }

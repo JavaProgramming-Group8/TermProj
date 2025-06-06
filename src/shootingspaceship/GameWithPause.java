@@ -94,7 +94,7 @@ public class GameWithPause extends Shootingspaceship {
             enemy.draw(g);
 
             if (enemy.isCollidedWithShot(shots)) {
-                it.remove(); // 총알에 맞았으면 적 제거!
+                it.remove();
             }
         }
         for (Shot s : shots) {

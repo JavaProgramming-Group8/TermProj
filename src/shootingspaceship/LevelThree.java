@@ -358,7 +358,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
                 	ItemEnemy itemEnemy = (ItemEnemy) enemy;
                 	Item item = itemEnemy.generateItem();
                 	if(item != null) {
-                		items.add(item);//아이템을 리스트에 추가
+                		items.add(item);
                 	}
                 }
                 enemyList.remove();
@@ -374,8 +374,8 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
         	item.draw(g);
         }
         
-        g.setColor(Color.WHITE); // 점수 글자색
-        g.setFont(new Font("맑은 고딕", Font.BOLD, 16)); // 점수 폰트
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("맑은 고딕", Font.BOLD, 16));
         g.drawString("Score: " + scoreLevelThree.getScore(), 10, 40);
         
         

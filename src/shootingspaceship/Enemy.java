@@ -1,16 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package shootingspaceship;
 
 import java.awt.Graphics;
 import java.awt.Color;
 
-/**
- *
- * @author wgpak
- */
 public class Enemy {
 
     protected float x_pos;
@@ -56,7 +48,6 @@ public class Enemy {
             }
             if (-collision_distance <= (y_pos - shot.getY()) && (y_pos - shot.getY() <= collision_distance)) {
                 if (-collision_distance <= (x_pos - shot.getX()) && (x_pos - shot.getX() <= collision_distance)) {
-                    //collided.
                     shot.collided();
                     return true;
                 }
@@ -68,7 +59,6 @@ public class Enemy {
     public boolean isCollidedWithPlayer(Player player) {
         if (-collision_distance <= (y_pos - player.getY()) && (y_pos - player.getY() <= collision_distance)) {
             if (-collision_distance <= (x_pos - player.getX()) && (x_pos - player.getX() <= collision_distance)) {
-                //collided.
                 return true;
             }
         }

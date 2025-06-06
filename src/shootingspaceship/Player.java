@@ -1,15 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package shootingspaceship;
 
 import java.awt.Graphics;
 import java.awt.Color;
-/**
- *
- * @author wgpak
- */
 
 public class Player {
 	protected int x_pos;
