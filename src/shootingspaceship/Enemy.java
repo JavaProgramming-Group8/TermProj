@@ -15,6 +15,7 @@ public class Enemy {
 
     protected float x_pos;
     protected float y_pos;
+    protected float delta_x;
     protected float delta_y;
     protected int max_x;
     protected int max_y;
