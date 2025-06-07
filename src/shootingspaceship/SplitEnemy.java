@@ -2,6 +2,7 @@ package shootingspaceship;
 
 import javax.swing.*;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,6 +11,7 @@ public class SplitEnemy extends Enemy{
 	protected float babyMaxDownSpeed = 1;
 	protected float babyMaxHorizonSpeed = 1;
 	private Random random;
+	private Image enemyImage;
 
 
 	public SplitEnemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
