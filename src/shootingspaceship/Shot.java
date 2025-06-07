@@ -13,10 +13,10 @@ import java.awt.Graphics;
  */
 public class Shot {
 
-	protected int x_pos;
-	protected int y_pos;
-	protected boolean alive;
-	protected final int radius = 3;
+    protected int x_pos;
+    protected int y_pos;
+    protected boolean alive;
+    protected final int radius = 3;
 
     public Shot(int x, int y) {
         x_pos = x;

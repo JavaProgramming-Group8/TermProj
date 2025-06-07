@@ -1,16 +1,16 @@
 package shootingspaceship;
 
 import java.awt.*;
-import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.*;
 
 public class Shootingspaceship extends JPanel implements Runnable {
 
     protected Thread th;
     protected Player player;
     protected Shot[] shots;
-    protected ArrayList<Enemy> enemies;
+    protected ArrayList enemies;
     protected final int shotSpeed = -2;
     protected final int playerLeftSpeed = -2;
     protected final int playerRightSpeed = 2;
@@ -36,7 +36,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
         setPreferredSize(new Dimension(width, height));
         player = new Player(width / 2, (int) (height * 0.9), playerMargin, width-playerMargin );
         shots = new Shot[ maxShotNum ];
-        enemies = new ArrayList<Enemy>();
+        enemies = new ArrayList();
         enemySize = 0;
         rand = new Random(1);
         timer = new javax.swing.Timer(enemyTimeGap, new addANewEnemy());
@@ -50,7 +50,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
         th.start();
     }
 
-    private class addANewEnemy implements ActionListener {
+    protected class addANewEnemy implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
             if (++enemySize <= maxEnemySize) {
@@ -70,7 +70,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
         }
     }
 
-    private class ShipControl implements KeyListener {
+    protected class ShipControl implements KeyListener {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
@@ -132,7 +132,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
                 player.moveX(playerRightSpeed);
             }
 
-            Iterator<Enemy> enemyList = enemies.iterator();
+            Iterator enemyList = enemies.iterator();
             while (enemyList.hasNext()) {
                 Enemy enemy = (Enemy) enemyList.next();
                 enemy.move();
@@ -171,7 +171,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
         // draw player
         player.drawPlayer(g);
 
-        Iterator<Enemy> enemyList = enemies.iterator();
+        Iterator enemyList = enemies.iterator();
         while (enemyList.hasNext()) {
             Enemy enemy = (Enemy) enemyList.next();
             enemy.draw(g);
