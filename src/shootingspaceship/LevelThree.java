@@ -14,8 +14,9 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
     private Random random;
 
     private Image backgroundImage; // 배경 이미지 필드 추가
+	private Image nerfImage = new ImageIcon(getClass().getResource("/shootingspaceship/nerf.png")).getImage();
 
-    private boolean isNerfMode = false;
+	private boolean isNerfMode = false;
     private long nerfEndTime = 0;
     
     private long lastFireTime = 0;
@@ -29,7 +30,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
         this.scoreLevelThree = new ScoreSystem();
         this.random = new Random();
 
-        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/background2.jpg");
+        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/img.png");
         if (imgUrl != null) {
             backgroundImage = new ImageIcon(imgUrl).getImage();
         }
@@ -337,6 +338,13 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 	
 	@Override
 	public void paintComponent(Graphics g) {
+		if (isNerfActive()) {
+			if (nerfImage != null) {
+				int imgX = player.getX() + 20; // 플레이어 오른쪽 옆
+				int imgY = player.getY() - 10;
+				g.drawImage(nerfImage, imgX, imgY, 20, 20, null);
+			}
+		}
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         } else {
