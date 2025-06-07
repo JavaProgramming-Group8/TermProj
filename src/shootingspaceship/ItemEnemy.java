@@ -1,5 +1,6 @@
 package shootingspaceship;
 
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.Random;
@@ -18,8 +19,8 @@ public class ItemEnemy extends Enemy{
 	        } else { 
 	            this.deadItem = new NerfItem(x, y);
 	        }
-		
-		
+
+		this.enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_6.png")).getImage();
 	}
 	
 	public Item generateItem() {
@@ -28,11 +29,14 @@ public class ItemEnemy extends Enemy{
 	
 	@Override
 	public void draw(Graphics g) {
-//        g.setColor(Color.magenta);
-//        int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
-//        int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
-//        g.fillPolygon(x_poly, y_poly, 4);
-		super.draw(g);
+		if (enemyImage != null) {
+			g.drawImage(enemyImage, (int) x_pos - 15, (int) y_pos - 15, 30, 30, null);
+		} else {
+			g.setColor(Color.magenta);
+			int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
+			int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
+			g.fillPolygon(x_poly, y_poly, 4);
+		}
     }
 	
 

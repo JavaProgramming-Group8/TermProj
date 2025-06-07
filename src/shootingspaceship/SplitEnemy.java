@@ -1,5 +1,6 @@
 package shootingspaceship;
 
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class SplitEnemy extends Enemy{
 	public SplitEnemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
 		super(x, y, delta_x, delta_y, max_x, max_y, delta_y_inc);
 		this.random = new Random();
+		this.enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_7.png")).getImage();
 	}
 	
 	public ArrayList<BasicEnemy> generateEnemy(float babyMaxDownSpeed, float babyMaxHorizonSpeed){
@@ -39,11 +41,14 @@ public class SplitEnemy extends Enemy{
 	
 	@Override
 	public void draw(Graphics g) {
-//        g.setColor(Color.orange);
-//        int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
-//        int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
-//        g.fillPolygon(x_poly, y_poly, 4);
-		super.draw(g);
+		if (enemyImage != null) {
+			g.drawImage(enemyImage, (int) x_pos - 15, (int) y_pos - 15, 30, 30, null);
+		} else {
+			g.setColor(Color.magenta);
+			int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
+			int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
+			g.fillPolygon(x_poly, y_poly, 4);
+		}
     }
 	
 }
