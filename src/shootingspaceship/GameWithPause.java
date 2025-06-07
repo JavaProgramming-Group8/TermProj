@@ -111,6 +111,9 @@ public class GameWithPause extends Shootingspaceship {
     }
     
     protected void triggerGameClear() {
+    	if (th != null) {
+            th.interrupt(); 
+        }
     	frame.getContentPane().removeAll();
         GameClear clear = new GameClear(frame);
         clear.setBounds(0, 0, 500, 500);
