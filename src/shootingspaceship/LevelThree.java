@@ -283,6 +283,7 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 		        if(scoreLevelThree.getScore() > 300) {
 		            scoreLevelThree.scoreReset();
 		            bossLevelTrigger();
+					break;
 		        }
 
 		        repaint();
