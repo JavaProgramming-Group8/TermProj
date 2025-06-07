@@ -39,10 +39,11 @@ public class SplitEnemy extends Enemy{
 	
 	@Override
 	public void draw(Graphics g) {
-        g.setColor(Color.orange);
-        int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
-        int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
-        g.fillPolygon(x_poly, y_poly, 4);
+//        g.setColor(Color.orange);
+//        int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
+//        int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
+//        g.fillPolygon(x_poly, y_poly, 4);
+		super.draw(g);
     }
 	
 }

@@ -1,13 +1,14 @@
 package shootingspaceship;
 
-import java.awt.Graphics;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 
 public class Player {
 	protected int x_pos;
 	protected int y_pos;
 	protected int min_x;
 	protected int max_x;
+    protected Image playerImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_4.png")).getImage();
 
     public Player(int x, int y, int min_x, int max_x) {
         x_pos = x;
@@ -37,9 +38,18 @@ public class Player {
     }
 
     public void drawPlayer(Graphics g) {
-        g.setColor(Color.red);
-        int[] x_poly = {x_pos, x_pos - 10, x_pos, x_pos + 10};
-        int[] y_poly = {y_pos, y_pos + 15, y_pos + 10, y_pos + 15};
-        g.fillPolygon(x_poly, y_poly, 4);
+//        g.setColor(Color.red);
+//        int[] x_poly = {x_pos, x_pos - 10, x_pos, x_pos + 10};
+//        int[] y_poly = {y_pos, y_pos + 15, y_pos + 10, y_pos + 15};
+//        g.fillPolygon(x_poly, y_poly, 4);
+        if (playerImage != null) {
+            g.drawImage(playerImage, x_pos - 20, y_pos - 20, 40, 40, null); // 크기 조절 및 위치 보정
+        } else {
+            // fallback
+            g.setColor(Color.red);
+            int[] x_poly = {x_pos, x_pos - 10, x_pos, x_pos + 10};
+            int[] y_poly = {y_pos, y_pos + 15, y_pos + 10, y_pos + 15};
+            g.fillPolygon(x_poly, y_poly, 4);
+        }
     }
 }
