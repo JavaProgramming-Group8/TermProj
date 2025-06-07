@@ -4,14 +4,10 @@ import java.awt.*;
 import javax.swing.ImageIcon;
 
 public class NerfItem extends Item {
-    private Image nerfImage;
+    protected Image nerfImage = new ImageIcon(getClass().getResource("/shootingspaceship/nerf.png")).getImage();;
 
     public NerfItem(int x, int y) {
         super(x, y);
-        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/nerf.png");
-        if (imgUrl != null) {
-            nerfImage = new ImageIcon(imgUrl).getImage();
-        }
     }
     
     @Override

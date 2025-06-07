@@ -2,22 +2,21 @@ package shootingspaceship;
 
 import javax.swing.*;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
+import java.awt.Image;
 
 public class SplitEnemy extends Enemy{
 	protected float babyMaxDownSpeed = 1;
 	protected float babyMaxHorizonSpeed = 1;
 	private Random random;
-	private Image enemyImage;
+	protected final Image enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_7.png")).getImage();
 
 
 	public SplitEnemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
 		super(x, y, delta_x, delta_y, max_x, max_y, delta_y_inc);
 		this.random = new Random();
-		this.enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_7.png")).getImage();
 	}
 	
 	public ArrayList<BasicEnemy> generateEnemy(float babyMaxDownSpeed, float babyMaxHorizonSpeed){

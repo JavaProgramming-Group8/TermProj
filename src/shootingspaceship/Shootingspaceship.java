@@ -10,7 +10,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
     protected Thread th;
     protected Player player;
     protected Shot[] shots;
-    protected ArrayList enemies;
+    protected ArrayList<Enemy> enemies;
     protected final int shotSpeed = -2;
     protected final int playerLeftSpeed = -2;
     protected final int playerRightSpeed = 2;

@@ -2,14 +2,14 @@ package shootingspaceship;
 
 import javax.swing.*;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Color;
 import java.util.Random;
+import java.awt.Image;
 
 public class ItemEnemy extends Enemy{
 	protected Item deadItem;
 	private Random random = new Random();
-	private Image enemyImage;
+	protected final Image enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_6.png")).getImage();
 	
 	public ItemEnemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc, ScoreSystem scoreSystem) {
 		super(x, y, delta_x, delta_y, max_x, max_y, delta_y_inc);
@@ -22,7 +22,6 @@ public class ItemEnemy extends Enemy{
 	            this.deadItem = new NerfItem(x, y);
 	        }
 
-		this.enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_6.png")).getImage();
 	}
 	
 	public Item generateItem() {

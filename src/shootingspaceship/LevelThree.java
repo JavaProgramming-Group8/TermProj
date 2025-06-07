@@ -22,14 +22,11 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
     private long lastFireTime = 0;
     private final long FIRE_INTERVAL = 200;
     
-    private ArrayList<Enemy> enemies; // Enemy 타입으로 선언
-    
     public LevelThree(JFrame frame) {
         super(frame);
         this.frame = frame;
         this.splitedBaby = new ArrayList<>();
         this.items = new ArrayList<>();
-        this.enemies = new ArrayList<>(); // Enemy 타입으로 생성
         this.scoreLevelThree = new ScoreSystem();
         this.random = new Random();
 
@@ -283,7 +280,6 @@ public class LevelThree extends GameWithPause implements NerfEffect, ScoreReceiv
 		        if(scoreLevelThree.getScore() > 300) {
 		            scoreLevelThree.scoreReset();
 		            bossLevelTrigger();
-					break;
 		        }
 
 		        repaint();

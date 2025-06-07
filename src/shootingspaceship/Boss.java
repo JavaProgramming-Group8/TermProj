@@ -49,10 +49,6 @@ public class Boss extends HPEnemy{
 	@Override
 	public void draw(Graphics g) {
 		this.bossImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_1.png")).getImage();
-//		g.setColor(Color.yellow);
-//        int[] x_poly = {(int) x_pos, (int) x_pos - 20, (int) x_pos, (int) x_pos + 20};
-//        int[] y_poly = {(int) y_pos + 30, (int) y_pos, (int) y_pos + 20, (int) y_pos};
-//        g.fillPolygon(x_poly, y_poly, 4);
 		if (bossImage != null) {
 			g.drawImage(bossImage, (int)x_pos - 20, (int)y_pos, bossWidth, bossHeight, null);
 		} else {

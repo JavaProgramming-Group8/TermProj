@@ -5,15 +5,11 @@ import javax.swing.*;
 
 public class BuffItem extends Item {
 	protected ScoreSystem scoreSystem;
-	protected Image buffItemImage;
+	protected Image buffItemImage = new ImageIcon(getClass().getResource("/shootingspaceship/buff.png")).getImage();;
 
 	public BuffItem(int x, int y, ScoreSystem scoreSystem) {
 		super(x, y);
 		this.scoreSystem = scoreSystem;
-		java.net.URL imgURL = getClass().getResource("/shootingspaceship/buff.png");
-		if (imgURL != null) {
-			buffItemImage = new ImageIcon(imgURL).getImage();
-		}
 	}
 
 	@Override

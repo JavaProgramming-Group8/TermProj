@@ -1,9 +1,10 @@
 package shootingspaceship;
 
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import java.awt.Graphics;
 import java.util.*;
+import java.awt.Image;
+import java.awt.Graphics;
+import java.awt.Color;
+import javax.swing.ImageIcon;
 
 public class Dragon extends Player {
 	
@@ -11,13 +12,12 @@ public class Dragon extends Player {
 	private boolean fireOnce = true;
 	private ScoreSystem scoreSystem = new ScoreSystem();
 	private GaugeBar gaugeBar = new GaugeBar(20, 20, 100, 10);
+	protected Image playerImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_4.png")).getImage();
 
-	private Image img4; // img_4 이미지 필드 추가
 	
 	public Dragon(int x, int y, int min_x, int max_x)
 	{
 		super(x, y, min_x, max_x);
-		img4 = new ImageIcon(getClass().getResource("/shootingspaceship/img_4.png")).getImage();
 	}
 	
 	public void setFiring(boolean firing)
@@ -84,23 +84,22 @@ public class Dragon extends Player {
 	public List<Shot> generateShots()
 	{
 		int score = scoreSystem.getScore();
-
+		
 		DragonShot currentWeapon;
-
-		int shotX = getX() + 25; // 이미지 중앙 (50/2)
-		int shotY = getY();
-
+		
 		if (score >= 200)
 		{
-			currentWeapon = new ThreeWayShot(shotX, shotY);
+			currentWeapon = new ThreeWayShot(getX(), getY());
 		}
+		
 		else if (score >= 100)
 		{
-			currentWeapon = new DoubleShot(shotX, shotY);
+			currentWeapon = new DoubleShot(getX(), getY());
 		}
+		
 		else
 		{
-			currentWeapon = new NormalShot(shotX, shotY);
+			currentWeapon = new NormalShot(getX(), getY());
 		}
 		
 		if (gaugeBar.getCurrentGauge() <= 0)
@@ -133,11 +132,21 @@ public class Dragon extends Player {
 		}
 		
 		return currentWeapon.fire();
+		
+		
 	}
 	
-	// 드래곤 그리기 메서드 추가
 	public void drawPlayer(Graphics g) {
-        g.drawImage(img4, getX(), getY(), 50, 50, null);
-    }
+
+	      if (playerImage != null) {
+	          g.drawImage(playerImage, x_pos - 20, y_pos - 20, 40, 40, null); // 크기 조절 및 위치 보정
+	      } else {
+	          // fallback
+	          g.setColor(Color.red);
+	          int[] x_poly = {x_pos, x_pos - 10, x_pos, x_pos + 10};
+	          int[] y_poly = {y_pos, y_pos + 15, y_pos + 10, y_pos + 15};
+	          g.fillPolygon(x_poly, y_poly, 4);
+	      }
+	  }
 	
 }

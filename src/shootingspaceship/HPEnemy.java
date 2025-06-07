@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class HPEnemy extends Enemy {
 	protected int hp;
-	private final Image myImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_5.png")).getImage();
+	private final Image enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_5.png")).getImage();
 	
 	
 	public HPEnemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
@@ -38,8 +38,8 @@ public class HPEnemy extends Enemy {
 	
 	@Override
 	public void draw(Graphics g) {
-		if (myImage != null) {
-			g.drawImage(myImage, (int) x_pos - 15, (int) y_pos - 15, 30, 30, null);
+		if (enemyImage != null) {
+			g.drawImage(enemyImage, (int) x_pos - 15, (int) y_pos - 15, 30, 30, null);
 		} else {
 			g.setColor(Color.blue);
 			int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
