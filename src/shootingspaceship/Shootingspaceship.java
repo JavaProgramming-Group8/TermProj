@@ -1,9 +1,9 @@
 package shootingspaceship;
 
 import java.awt.*;
+import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.*;
 
 public class Shootingspaceship extends JPanel implements Runnable {
 
@@ -60,6 +60,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
                 } while (downspeed == 0);
 
                 float horspeed = rand.nextFloat() * 2 * enemyMaxHorizonSpeed - enemyMaxHorizonSpeed;
+                //System.out.println("enemySize=" + enemySize + " downspeed=" + downspeed + " horspeed=" + horspeed);
 
                 Enemy newEnemy = new Enemy((int) (rand.nextFloat() * width), 0, horspeed, downspeed, width, height, enemyDownSpeedInc);
                 enemies.add(newEnemy);
@@ -79,6 +80,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
                     playerMoveRight = true;
                     break;
                 case KeyEvent.VK_UP:
+                    // generate new shot and add it to shots array
                     for (int i = 0; i < shots.length; i++) {
                         if (shots[i] == null) {
                             shots[i] = player.generateShot();
@@ -105,13 +107,20 @@ public class Shootingspaceship extends JPanel implements Runnable {
     }
 
     public void run() {
+        //int c=0;
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
         while (true) {
+            //System.out.println( ++c );
+            // do operations on shots in shots array
             for (int i = 0; i < shots.length; i++) {
                 if (shots[i] != null) {
+                    // move shot
                     shots[i].moveShot(shotSpeed);
+
+                    // test if shot is out
                     if (shots[i].getY() < 0) {
+                        // remove shot from array
                         shots[i] = null;
                     }
                 }
@@ -134,7 +143,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException ex) {
-                System.err.println("Thread interrupted: " + ex.getMessage());
+                // do nothing
             }
 
             Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -151,6 +160,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
         dbg.fillRect(0, 0, this.getSize().width, this.getSize().height);
 
         dbg.setColor(getForeground());
+        //paint (dbg);
 
         g.drawImage(dbImage, 0, 0, this);
     }
@@ -158,6 +168,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         initImage(g);
 
+        // draw player
         player.drawPlayer(g);
 
         Iterator enemyList = enemies.iterator();
@@ -173,6 +184,7 @@ public class Shootingspaceship extends JPanel implements Runnable {
             }
         }
 
+        // draw shots
         for (int i = 0; i < shots.length; i++) {
             if (shots[i] != null) {
                 shots[i].drawShot(g);
