@@ -6,17 +6,32 @@ import java.awt.event.*;
 
 public class StartScreen extends JPanel {
     private JFrame frame;
+    private Image backgroundImage;
 
     public StartScreen(JFrame frame) {
         this.frame = frame;
-        setLayout(new GridLayout(3, 1));
+        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/img.png");
+        backgroundImage = imgUrl != null ? new ImageIcon(imgUrl).getImage() : null;
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setOpaque(false);
+        setBackground(Color.BLACK);
 
         JLabel title = new JLabel("슈팅 게임", SwingConstants.CENTER);
         title.setFont(new Font("맑은 고딕", Font.BOLD, 36));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setForeground(Color.WHITE);
+        add(Box.createVerticalStrut(60));
         add(title);
+        add(Box.createVerticalStrut(40));
+
+        Dimension btnSize = new Dimension(200, 45);
 
         JButton startButton = new JButton("게임 시작");
         startButton.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+        startButton.setMaximumSize(btnSize);
+        startButton.setPreferredSize(btnSize);
+        startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 startGame();
@@ -25,6 +40,9 @@ public class StartScreen extends JPanel {
 
         JButton howToButton = new JButton("게임 방법");
         howToButton.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+        howToButton.setMaximumSize(btnSize);
+        howToButton.setPreferredSize(btnSize);
+        howToButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         howToButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 showInstructions();
@@ -32,6 +50,7 @@ public class StartScreen extends JPanel {
         });
 
         add(startButton);
+        add(Box.createVerticalStrut(20));
         add(howToButton);
     }
 
@@ -50,18 +69,45 @@ public class StartScreen extends JPanel {
 
     private void showInstructions() {
         JOptionPane.showMessageDialog(this,
+                "■■ 게임 설명 ■■\n" +
+                "이 게임은 플레이어 우주선을 조작해 다양한 적과 보스를 처치하는 슈팅 게임입니다.\n" +
+                "적을 물리치고 점수를 쌓아 보스 스테이지에 도전해보세요!\n\n" +
                 "■ 조작법\n" +
-                "← / → : 플레이어 이동\n" +
-                "↓ : 총알 발사\n" +
+                "← / →  : 플레이어 좌우 이동\n" +
+                "↑ : 총알 발사\n" +
                 "P : 일시정지/재개\n\n" +
+                "■ 등장 캐릭터\n" +
+                "- 일반 적: 가장 기본적인 적\n" +
+                "- 분열 적: 처치 시 세 마리로 분열\n" +
+                "- 보스: 강력한 체력을 가진 최종 보스\n\n" +
+                "■ 총알/공격 종류\n" +
+                "- 일반 총알: 플레이어의 기본 공격\n" +
+                "- 2방향 총알: 100점 획득 시 사용 가능\n" +
+                "- 3방향 총알: 200점 획득 시 사용 가능\n" +
+                "■ 아이템 효과\n" +
+                "- 버프: 20점 획득\n" +
+                "- 너프: 조작 반전 \n\n" +
                 "■ 게임 목표\n" +
-                "- 적을 처치하고 점수를 획득하세요.\n" +
-                "- 점수가 300점이 넘으면 보스 스테이지로 진입합니다.\n" +
-                "- 아이템을 먹으면 다양한 효과가 적용됩니다.\n\n" +
-                "■ 팁\n" +
-                "- 적의 공격과 아이템을 잘 피하세요!\n" +
-                "- 보스를 처치하면 게임이 클리어됩니다.",
+                "- 적을 처치해 점수를 획득하세요.\n" +
+                "- 점수 300점 이상 달성 시 보스 스테이지에 진입합니다.\n" +
+                "- 보스를 처치하면 게임이 클리어됩니다!\n\n" +
+                "■ 게이지바\n" +
+                "- 적을 처치하거나 아이템을 먹으면 게이지가 채워집니다.\n" +
+                "- 게이지가 모두 차면 특수 공격(예: 3방향 총알 등)을 사용할 수 있습니다.\n\n" +
+                "■ 플레이 팁\n" +
+                "- 일시정지(P키) 기능으로 위기를 넘길 수 있습니다.\n" +
+                "- 다양한 적 패턴과 보스 공격을 피해 생존하세요.",
                 "게임 방법",
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
     }
 }

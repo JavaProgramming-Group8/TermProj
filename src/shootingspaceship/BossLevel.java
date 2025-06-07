@@ -8,35 +8,41 @@ import java.util.List;
 import javax.swing.*;
 
 public class BossLevel extends GameWithPause{
-	protected Boss boss;
-	protected ArrayList<EnemyShot> bossShots;
-	protected int bossShotSpeed = 3;
-	
-	private long lastFireTime = 0;
-	private final long FIRE_INTERVAL = 200;
+    protected Boss boss;
+    protected ArrayList<EnemyShot> bossShots;
+    protected int bossShotSpeed = 3;
 
-	public BossLevel(JFrame frame) {
-		super(frame);
+    private Image backgroundImage;
 
-		if(timer != null) {
-			timer.stop();
-		}
-		enemies.clear();
+    private long lastFireTime = 0;
+    private final long FIRE_INTERVAL = 200;
 
-		boss = new Boss(width / 2, height / 5, 1, 0, width, height, 0);
-		enemies.add(boss);
+    public BossLevel(JFrame frame) {
+        super(frame);
+        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/img.png");
+        if (imgUrl != null) {
+            backgroundImage = new ImageIcon(imgUrl).getImage();
+        }
 
-		bossShots = new ArrayList<>();
-
-		this.player = new Dragon(250, 400, 0, 500);
+        if(timer != null) {
+            timer.stop();
+        }
+        enemies.clear();
 		
+        boss = new Boss(width / 2, height / 5, 1, 0, width, height, 0);
+        enemies.add(boss);
 
-		addKeyListener(new BossKeyListener());
-		setFocusable(true);
-		requestFocusInWindow();
-	}
-	
-	private void bossColliededWithShot() {
+        bossShots = new ArrayList<>();
+
+        this.player = new Dragon(250, 400, 0, 500);
+        
+
+        addKeyListener(new BossKeyListener());
+        setFocusable(true);
+        requestFocusInWindow();
+    }
+    
+    private void bossColliededWithShot() {
 		 if (boss != null && boss.hp > 0) {
 	            if (boss.isCollidedWithShot(shots)) {
 	                if (boss.hp <= 0) {
@@ -62,7 +68,7 @@ public class BossLevel extends GameWithPause{
             	shot.collided();
             	enemyShotList.remove();
         
-            	triggerGameOver();
+            	triggerGameClear();
             	return;
             }
         }
@@ -127,7 +133,7 @@ public class BossLevel extends GameWithPause{
 		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
 		while (true) {
-			if (!isPaused) { // ★ 일시정지 체크 추가
+			if (!isPaused) {
 	        	if (player instanceof Dragon)
 	        	{
 	        		Dragon dragon = (Dragon) player;
@@ -217,26 +223,30 @@ public class BossLevel extends GameWithPause{
 	}
 	
 	public void paintComponent(Graphics g) {
-		initImage(g);
+        // 배경 그리기
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        } else {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
 
-        
         player.drawPlayer(g);
 
-        
         for (int i = 0; i < shots.length; i++) {
             if (shots[i] != null) {
                 shots[i].drawShot(g);
             }
         }
-        
+
         boss.draw(g);
-        
+
         for(EnemyShot shot: bossShots) {
-        	if(shot != null) {
-        		shot.drawShot(g);
-        	}
+            if(shot != null) {
+                shot.drawShot(g);
+            }
         }
-        
+
         if (player instanceof Dragon) {
             Dragon dragon = (Dragon) player;
             int gauge = dragon.getGauge();
@@ -255,12 +265,11 @@ public class BossLevel extends GameWithPause{
             g.setColor(Color.BLACK);
             g.drawRect(barX, barY, barW, barH);
         }
-
-	}
+    }
 	
 	public void triggerGameClear() {
 	    frame.getContentPane().removeAll();
-	    GameOverScreen clearScreen = new GameOverScreen(frame);
+	    GameClear clearScreen = new GameClear(frame);
 	    clearScreen.setBounds(0, 0, 500, 500);
 	    frame.add(clearScreen);
 	    frame.revalidate();

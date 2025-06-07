@@ -1,16 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package shootingspaceship;
 
-import java.awt.Graphics;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 
-/**
- *
- * @author wgpak
- */
 public class Enemy {
 
     protected float x_pos;
@@ -21,6 +13,7 @@ public class Enemy {
     protected int max_y;
     protected float delta_y_inc;
     protected final int collision_distance = 10;
+    protected final Image enemyImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_2.png")).getImage();
 
     public Enemy(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
         x_pos = x;
@@ -56,7 +49,6 @@ public class Enemy {
             }
             if (-collision_distance <= (y_pos - shot.getY()) && (y_pos - shot.getY() <= collision_distance)) {
                 if (-collision_distance <= (x_pos - shot.getX()) && (x_pos - shot.getX() <= collision_distance)) {
-                    //collided.
                     shot.collided();
                     return true;
                 }
@@ -68,7 +60,6 @@ public class Enemy {
     public boolean isCollidedWithPlayer(Player player) {
         if (-collision_distance <= (y_pos - player.getY()) && (y_pos - player.getY() <= collision_distance)) {
             if (-collision_distance <= (x_pos - player.getX()) && (x_pos - player.getX() <= collision_distance)) {
-                //collided.
                 return true;
             }
         }
@@ -76,9 +67,18 @@ public class Enemy {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.yellow);
-        int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
-        int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
-        g.fillPolygon(x_poly, y_poly, 4);
+//        g.setColor(Color.yellow);
+//        int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
+//        int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
+//        g.fillPolygon(x_poly, y_poly, 4);
+        if (enemyImage != null) {
+            g.drawImage(enemyImage, (int) x_pos - 15, (int) y_pos - 15, 30, 30, null); // 위치 보정 + 크기 설정
+        } else {
+            // fallback: 도형 그리기
+            g.setColor(Color.yellow);
+            int[] x_poly = {(int) x_pos, (int) x_pos - 10, (int) x_pos, (int) x_pos + 10};
+            int[] y_poly = {(int) y_pos + 15, (int) y_pos, (int) y_pos + 10, (int) y_pos};
+            g.fillPolygon(x_poly, y_poly, 4);
+        }
     }
 }

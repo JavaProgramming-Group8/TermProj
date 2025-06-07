@@ -1,12 +1,15 @@
 package shootingspaceship;
 
-import java.awt.Graphics;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 
 public class Boss extends HPEnemy{
 	protected int shot_x;
 	protected int shot_y;
 	protected int bossShotCoolTime;
+	protected Image bossImage;
+	int bossWidth = 60;  // 너비 조절
+	int bossHeight = 60; // 높이 조절
 	
 	public Boss(int x, int y, float delta_x, float delta_y, int max_x, int max_y, float delta_y_inc) {
 		super(x, y, delta_x, delta_y, max_x, max_y, delta_y_inc);
@@ -45,10 +48,19 @@ public class Boss extends HPEnemy{
 	
 	@Override
 	public void draw(Graphics g) {
-		g.setColor(Color.yellow);
-        int[] x_poly = {(int) x_pos, (int) x_pos - 20, (int) x_pos, (int) x_pos + 20};
-        int[] y_poly = {(int) y_pos + 30, (int) y_pos, (int) y_pos + 20, (int) y_pos};
-        g.fillPolygon(x_poly, y_poly, 4);
+		this.bossImage = new ImageIcon(getClass().getResource("/shootingspaceship/img_1.png")).getImage();
+//		g.setColor(Color.yellow);
+//        int[] x_poly = {(int) x_pos, (int) x_pos - 20, (int) x_pos, (int) x_pos + 20};
+//        int[] y_poly = {(int) y_pos + 30, (int) y_pos, (int) y_pos + 20, (int) y_pos};
+//        g.fillPolygon(x_poly, y_poly, 4);
+		if (bossImage != null) {
+			g.drawImage(bossImage, (int)x_pos - 20, (int)y_pos, bossWidth, bossHeight, null);
+		} else {
+			g.setColor(Color.yellow);
+			int[] x_poly = {(int) x_pos, (int) x_pos - 20, (int) x_pos, (int) x_pos + 20};
+			int[] y_poly = {(int) y_pos + 30, (int) y_pos, (int) y_pos + 20, (int) y_pos};
+			g.fillPolygon(x_poly, y_poly, 4);
+		}
 		
 		if (hp > 0) {
             int barWidth = 400; 
