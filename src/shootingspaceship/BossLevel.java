@@ -19,7 +19,7 @@ public class BossLevel extends GameWithPause{
 
     public BossLevel(JFrame frame) {
         super(frame);
-        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/img.png");
+        java.net.URL imgUrl = getClass().getResource("/shootingspaceship/bosslevelbg.png");
         if (imgUrl != null) {
             backgroundImage = new ImageIcon(imgUrl).getImage();
         }
